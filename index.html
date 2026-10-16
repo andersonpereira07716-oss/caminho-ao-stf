@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caminho ao STF Pro Ultimate Edition</title>
+    
+    <!-- Meta Tags PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="STF Game">
+
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --container-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+            --card-bg: #334155;
+            --border-color: #475569;
+        }
+        .theme-classic {
+            --bg-color: #1c1408;
+            --container-bg: #2d2010;
+            --text-color: #fdf6e2;
+            --accent-color: #d97706;
+            --card-bg: #3d2d18;
+            --border-color: #785824;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 8px; display: flex; justify-content: center; transition: 0.3s; }
+        .container { max-width: 520px; width: 100%; background: var(--container-bg); padding: 16px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-color); }
+        
+        h1 { text-align: center; color: var(--accent-color); font-size: 1.5rem; margin-bottom: 4px; font-weight: 700; }
+        .subtitle { text-align: center; color: #94a3b8; font-size: 0.9rem; margin-bottom: 12px; }
+        
+        .news-ticker { background: var(--bg-color); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.82rem; color: #f59e0b; margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
+        .modal-content { background: var(--container-bg); padding: 24px; border-radius: 16px; width: 100%; max-width: 420px; border: 2px solid var(--accent-color); text-align: center; }
+        .modal-content input { width: 100%; padding: 14px; margin: 15px 0; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); text-align: center; font-size: 1.1rem; }
+
+        .progress-container { background: var(--bg-color); border-radius: 10px; height: 10px; width: 100%; margin-bottom: 12px; border: 1px solid var(--border-color); overflow: hidden; }
+        .progress-bar { background: linear-gradient(90deg, var(--accent-color), #f59e0b); height: 100%; width: 0%; transition: width 0.4s; }
+
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--bg-color); padding: 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); }
+        .stat-item { font-size: 0.9rem; font-weight: bold; }
+        
+        .top-nav { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
+        .btn-nav { padding: 12px; background: var(--card-bg); color: var(--accent-color); border: 1px solid var(--border-color); border-radius: 10px; font-weight: bold; font-size: 0.85rem; cursor: pointer; text-align: center; }
+        .btn-nav:active { background: #2563eb; color: white; }
+
+        .card { background: var(--card-bg); padding: 16px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); }
+        .card-title { color: #f59e0b; font-size: 0.95rem; font-weight: bold; text-transform: uppercase; margin-bottom: 8px; }
+        .card-text { font-size: 0.98rem; line-height: 1.5; color: var(--text-color); }
+        
+        .feedback { background: var(--bg-color); border-left: 4px solid var(--accent-color); padding: 10px 14px; margin-bottom: 12px; font-size: 0.88rem; border-radius: 6px; display: none; }
+        
+        .btn-option { width: 100%; padding: 16px; margin-bottom: 10px; background: #2563eb; color: white; border: none; border-radius: 12px; font-size: 0.98rem; font-weight: 600; text-align: left; cursor: pointer; transition: 0.2s; line-height: 1.4; }
+        .btn-option:active { background: #1d4ed8; transform: scale(0.98); }
+        
+        .btn-action { width: 100%; padding: 14px; background: #10b981; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 8px; }
+        
+        .juri-box { display: flex; justify-content: space-around; margin: 12px 0; background: var(--bg-color); padding: 12px; border-radius: 10px; font-size: 1.4rem; }
+
+        .log-box { margin-top: 10px; background: var(--bg-color); padding: 10px 12px; border-radius: 10px; max-height: 110px; overflow-y: auto; font-size: 0.8rem; color: #94a3b8; border: 1px solid var(--border-color); }
+        
+        .bottom-actions { display: flex; gap: 6px; margin-top: 10px; }
+        .btn-bottom { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); color: #94a3b8; padding: 10px 4px; border-radius: 8px; font-size: 0.78rem; font-weight: bold; cursor: pointer; text-align: center; }
+        .btn-danger { background: #991b1b; color: white; border: none; }
+    </style>
+</head>
+<body>
+
+<div class="modal" id="modal-start">
+    <div class="modal-content">
+        <h2>⚖️ Caminho ao STF Pro</h2>
+        <p style="font-size: 0.95rem; color: #94a3b8; margin-top: 8px;">Digite o nome do Doutor(a):</p>
+        <input type="text" id="player-name-input" value="Dr. Anderson">
+        <button class="btn-action" onclick="iniciarJogoDefinitivo()">Iniciar Carreira</button>
+    </div>
+</div>
+
+<div class="container">
+    <h1>⚖️ Caminho ao STF</h1>
+    <div class="subtitle" id="player-display">Advogado(a): Dr. Anderson</div>
+
+    <div class="news-ticker" id="news-text">📰 NOTÍCIAS: STF abre nova sessão para julgamento de matérias constitucionais.</div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="game-progress"></div>
+    </div>
+
+    <!-- Navegação Expandida -->
+    <div class="top-nav">
+        <button class="btn-nav" onclick="mostrarAba('jogo')">🎮 História Principal</button>
+        <button class="btn-nav" onclick="mostrarAba('stf')">🏛️ Plenário do STF</button>
+        <button class="btn-nav" onclick="mostrarAba('luxo')">💎 Estilo de Vida</button>
+        <button class="btn-nav" onclick="mostrarAba('concursos')">⚖️ Concursos Públicos</button>
+        <button class="btn-nav" onclick="mostrarAba('estatisticas')">📊 Estatísticas & Tema</button>
+        <button class="btn-nav" onclick="mostrarAba('escritorio')">🏢 Banca & Equipe</button>
+        <button class="btn-nav" onclick="mostrarAba('juri')">⚔️ Tribunal do Júri</button>
+        <button class="btn-nav" onclick="mostrarAba('estudos')">🎓 Estudos OAB</button>
+        <button class="btn-nav" onclick="mostrarAba('casos')">🏛️ Fórum de Causas</button>
+        <button class="btn-nav" onclick="mostrarAba('financas')">🏦 Banco & Renda</button>
+    </div>
+
+    <div class="stats" id="stats-box">
+        <div class="stat-item">📚 Conhec: <span id="st-conh" style="color:#38bdf8;">30</span></div>
+        <div class="stat-item">⚖️ Reputação: <span id="st-rep" style="color:#4ade80;">50</span></div>
+        <div class="stat-item">💰 Capital: R$ <span id="st-cap" style="color:#facc15;">1.500</span></div>
+        <div class="stat-item">🤝 Conexões: <span id="st-conx" style="color:#c084fc;">10</span></div>
+        <div class="stat-item" style="grid-column: span 2;">⚡ Energia: <span id="st-eng" style="color:#ef4444;">100%</span> | 🎯 Nível: <span id="st-cargo" style="color:#f59e0b;">Estudante</span></div>
+    </div>
+
+    <div class="feedback" id="feedback-box"></div>
+
+    <!-- HISTÓRIA PRINCIPAL -->
+    <div id="aba-jogo">
+        <div class="card">
+            <div class="card-title" id="phase-title">ATO 1</div>
+            <div class="card-text" id="event-text">Carregando...</div>
+        </div>
+        <div id="options-container"></div>
+    </div>
+
+    <!-- SUPREMA CORTE (STF) -->
+    <div id="aba-stf" style="display: none;">
+        <div class="card">
+            <div class="card-title">🏛️ Gabinete do Ministro do STF</div>
+            <div class="card-text">Vote em Ações Diretas de Inconstitucionalidade (ADI) e defina o futuro do país!</div>
+            <p style="margin-top: 10px; font-weight: bold;" id="stf-caso-titulo">Pauta do Dia: Marco Temporal de Terras</p>
+            <p style="font-size: 0.88rem; color: #94a3b8; margin-top: 4px;" id="stf-caso-desc">Julgamento sobre a tese do marco temporal para demarcação de reservas.</p>
+        </div>
+        <button class="btn-action" style="background:#2563eb;" onclick="votarSTF('favor')">⚖️ Votar A Favor da Tese Constitucional</button>
+        <button class="btn-action" style="background:#dc2626; margin-top:8px;" onclick="votarSTF('contra')">🚫 Votar Contra a Tese Constitucional</button>
+    </div>
+
+    <!-- ESTILO DE VIDA E LUXO -->
+    <div id="aba-luxo" style="display: none;">
+        <div class="card">
+            <div class="card-title">💎 Bens de Luxo & Notoriedade</div>
+            <div class="card-text">Converta o seu património em prestígio social e conexões políticas.</div>
+        </div>
+        <button class="btn-action" style="background:#d97706;" onclick="comprarLuxo('Relógio de Colecionador', 5000, 10, 15)">⌚ Relógio de Luxo (-R$ 5.000 | +10 Rep, +15 Conx)</button>
+        <button class="btn-action" style="background:#7c3aed; margin-top:8px;" onclick="comprarLuxo('Sedan Blindado Executive', 25000, 35, 40)">🚗 Carro Blindado (-R$ 25.000 | +35 Rep, +40 Conx)</button>
+        <button class="btn-action" style="background:#059669; margin-top:8px;" onclick="comprarLuxo('Cobertura em Brasília', 100000, 80, 100)">🏰 Cobertura em Brasília (-R$ 100.000 | +80 Rep, +100 Conx)</button>
+    </div>
+
+    <!-- CONCURSOS PÚBLICOS -->
+    <div id="aba-concursos" style="display: none;">
+        <div class="card">
+            <div class="card-title">⚖️ Concursos da Magistratura</div>
+            <div class="card-text">Preste provas públicas para seguir carreira no Ministério Público ou na Magistratura.</div>
+        </div>
+        <button class="btn-action" style="background:#2563eb;" onclick="prestarConcurso('promotor')">Prestar Concurso para Promotor (Exige Conh: 50)</button>
+        <button class="btn-action" style="background:#8b5cf6; margin-top:10px;" onclick="prestarConcurso('juiz')">Prestar Concurso para Juiz de Direito (Exige Conh: 70)</button>
+    </div>
+
+    <!-- ESTATÍSTICAS E TEMA -->
+    <div id="aba-estatisticas" style="display: none;">
+        <div class="card">
+            <div class="card-title">📊 Dashboard de Carreira</div>
+            <div class="card-text" id="stats-dashboard">
+                • Processos Vencidos: <strong>0</strong><br>
+                • Infrações OAB: <strong>0</strong><br>
+                • Honorários Totais: <strong>R$ 1.500</strong><br>
+                • Status: <strong>Regular</strong>
+            </div>
+        </div>
+        <button class="btn-action" style="background:#d97706;" onclick="alternarTema()">🎨 Alternar Tema Visual (Dark / Clássico)</button>
+    </div>
+
+    <!-- ESCRITÓRIO E BANCA -->
+    <div id="aba-escritorio" style="display: none;">
+        <div class="card">
+            <div class="card-title">🏢 Gestão de Equipe</div>
+            <div class="card-text">Contrate profissionais para automatizar receitas e aliviar sua energia mental.</div>
+        </div>
+        <div class="card">
+            <p style="font-size: 0.9rem; margin-bottom: 8px;">Secretária: <strong id="eq-sec">Não</strong> | Estagiários: <strong id="eq-est">0</strong></p>
+            <button class="btn-action" style="background:#2563eb;" onclick="contratarSecretaria()">Contratar Secretária (-R$ 1.000)</button>
+            <button class="btn-action" style="background:#8b5cf6; margin-top:10px;" onclick="contratarEstagiario()">Contratar Estagiário (-R$ 1.500)</button>
+        </div>
+    </div>
+
+    <!-- TRIBUNAL DO JÚRI -->
+    <div id="aba-juri" style="display: none;">
+        <div class="card">
+            <div class="card-title">⚔️ Plenário do Júri</div>
+            <div class="card-text">Convença a maioria dos 7 jurados para absolver seu cliente!</div>
+            <div class="juri-box" id="juri-icons">😐 😐 😐 😐 😐 😐 😐</div>
+            <p style="font-size: 0.85rem;">Jurados a favor: <strong id="juri-favor" style="color:#4ade80;">0</strong>/7</p>
+        </div>
+        <button class="btn-option" onclick="argumentarJuri('tecnico')">1. Apresentar Prova Pericial Técnica</button>
+        <button class="btn-option" onclick="argumentarJuri('emocional')">2. Fazer Apelo Emocional aos Jurados</button>
+    </div>
+
+    <!-- BIBLIOTECA DE ESTUDOS OAB -->
+    <div id="aba-estudos" style="display: none;">
+        <div class="card">
+            <div class="card-title">🎓 Questão Prática de Direito</div>
+            <div class="card-text">Responda a perguntas jurídicas reais para aumentar seu conhecimento e capital.</div>
+            <p style="margin-top: 10px; font-weight: 600;" id="quiz-pergunta">Carregando questão...</p>
+        </div>
+        <div id="quiz-opcoes"></div>
+    </div>
+
+    <!-- FÓRUM -->
+    <div id="aba-casos" style="display: none;">
+        <div class="card">
+            <div class="card-title">🏛️ Fórum & Causas Rápidas</div>
+            <div class="card-text">Aceite causas avulsas de clientes para acumular honorários.</div>
+        </div>
+        <button class="btn-action" onclick="gerarCasoAvulso()">📋 Pegar Causa Rápida (-15⚡)</button>
+        <div id="extra-case-area" style="margin-top: 12px;"></div>
+    </div>
+
+    <!-- BANCO -->
+    <div id="aba-financas" style="display: none;">
+        <div class="card">
+            <div class="card-title">🏦 Investimentos & Renda Passiva</div>
+            <div class="card-text">Invista o capital acumulado para receber retornos a cada decisão.</div>
+        </div>
+        <div class="card">
+            <p style="font-size: 0.9rem; margin-bottom: 8px;">Rendimento por Turno: <strong>R$ <span id="st-rendimento">0</span></strong></p>
+            <button class="btn-action" style="background:#2563eb;" onclick="investir(500)">📈 Renda Fixa (-R$ 500)</button>
+            <button class="btn-action" style="background:#8b5cf6; margin-top:10px;" onclick="investir(2000)">🏢 Imóveis (-R$ 2.000)</button>
+        </div>
+    </div>
+
+    <div class="log-box" id="history-log">
+        <div style="font-weight: bold; color: var(--text-color); margin-bottom: 4px;">📜 Histórico da Carreira:</div>
+        <div id="log-content">A jornada rumo ao STF começou...</div>
+    </div>
+
+    <div class="bottom-actions">
+        <button class="btn-bottom" onclick="descansar()">⚡ Descansar</button>
+        <button class="btn-bottom" onclick="exportarSave()">💾 Exportar</button>
+        <button class="btn-bottom" onclick="importarSave()">📥 Importar</button>
+        <button class="btn-bottom btn-danger" onclick="resetarCarreira()">🔄 Resetar</button>
+    </div>
+</div>
+
+<script>
+    // Registo do Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function tocarEfeito(tipo) {
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            if (tipo === 'martelo') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            } else {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+            }
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        } catch(e) {}
+    }
+
+    let stats = { conh: 30, rep: 50, cap: 1500, conx: 10, eng: 100, cargo: "Estudante", investimentos: 0, secretaria: false, estagiarios: 0, infracoesOAB: 0, vitorias: 0, totalGanho: 1500, temaClássico: false };
+    let playerName = "Dr. Anderson";
+    let currentEvent = 0;
+    let historico = [];
+    let juradosFavor = 0;
+
+    const noticias = [
+        "📰 NOTÍCIAS: Congresso debate nova reformulação do Código de Processo Civil.",
+        "📰 NOTÍCIAS: Tribunal de Ética da OAB intensifica fiscalização sobre publicidade jurídica.",
+        "📰 NOTÍCIAS: STF fixa tese com repercussão geral sobre direito tributário."
+    ];
+
+    const questoesOAB = [
+        { pergunta: "Qual é o recurso cabível contra decisão interlocutória de urgência?", opcoes: ["Agravo de Instrumento", "Apelação", "Recurso Ordinário"], correta: 0 },
+        { pergunta: "Quem detém o monopólio da ação penal pública incondicionada?", opcoes: ["Polícia Civil", "Ministério Público", "Juiz de Direito"], correta: 1 }
+    ];
+
+    const eventos = [
+        {
+            fase: "ATO 1: A Faculdade (Semana de Provas)",
+            cargo: "Estudante de Direito",
+            texto: "As provas finais chegaram com exigência máxima. Como pretende organizar os seus estudos?",
+            opcoes: [
+                { texto: "Passar noites na biblioteca estudando doutrinas clássicas", conh: 15, rep: 2, cap: -50, conx: 0, eng: -30, feedback: "O seu conhecimento jurídico disparou com o estudo árduo." },
+                { texto: "Comprar resumos e fazer contactos no centro académico", conh: 5, rep: -2, cap: -150, conx: 10, eng: -10, feedback: "Fez ótimas amizades com futuros colegas." }
+            ]
+        },
+        {
+            fase: "ATO 1: Estágio Supervisionado",
+            cargo: "Estagiário Jurídico",
+            texto: "Surgiu uma vaga de estágio disputada. O advogado titular pede dedicação total em troca de experiência prática.",
+            opcoes: [
+                { texto: "Aceitar a alta carga horária e aprender a prática forense", conh: 12, rep: 8, cap: 300, conx: 15, eng: -25, feedback: "Absorveu a rotina dos tribunais com excelência." },
+                { texto: "Procurar estágio na Defensoria Pública do Estado", conh: 10, rep: 15, cap: 400, conx: 5, eng: -15, feedback: "Teve contacto direto com causas sociais." }
+            ]
+        },
+        {
+            fase: "ATO 2: [EXAME OAB] Prova Prático-Profissional",
+            cargo: "Bacharel em Direito",
+            texto: "Questão da OAB: 'Qual é o prazo processual para a interposição de Recurso Especial ao STJ?'",
+            opcoes: [
+                { texto: "15 dias úteis", conh: 22, rep: 12, cap: 600, conx: 10, eng: -10, feedback: "ACERTOU! Domínio impecável dos prazos." },
+                { texto: "5 dias úteis", conh: -10, rep: -5, cap: 0, conx: -5, eng: -10, feedback: "ERROU! 5 dias é Embargos de Declaração." }
+            ]
+        },
+        {
+            fase: "ATO 3: O Primeiro Grande Contrato",
+            cargo: "Advogado Júnior",
+            texto: "Um empresário com problemas fiscais complexos procura o seu escritório oferecendo honorários avultados para uma defesa agressiva.",
+            opcoes: [
+                { texto: "Aceitar a causa utilizando teses agressivas", conh: 10, rep: -15, cap: 4500, conx: 15, eng: -20, feedback: "Capital alto, mas gerou alerta no Tribunal de Ética da OAB!", etica: true },
+                { texto: "Recusar a causa por conflito com seus princípios éticos", conh: 10, rep: 25, cap: 0, conx: -5, eng: 0, feedback: "Respeito total da classe jurídica." }
+            ]
+        },
+        {
+            fase: "ATO 4: [AUDIÊNCIA] Sustentação no Tribunal",
+            cargo: "Advogado Sênior",
+            texto: "Durante a sustentação oral no Tribunal de Justiça, o Relator questiona a aplicabilidade de uma tese.",
+            opcoes: [
+                { texto: "Fundamentar a tribuna com jurisprudência atualizada do STF", conh: 25, rep: 20, cap: 2000, conx: 10, eng: -15, feedback: "Argumentação impecável! Provimento unânime." }
+            ]
+        },
+        {
+            fase: "ATO 5: Sabatina Final no Senado Federal",
+            cargo: "Indicado ao STF",
+            texto: "Indicado à Suprema Corte! Os Senadores avaliam sua consistência jurídica na CCJ.",
+            opcoes: [
+                { texto: "Apresentar sólido Notável Saber Jurídico e defesa constitucional", conh: 30, rep: 30, cap: 0, conx: 15, eng: -30, feedback: "Aprovado com louvor para o STF!" }
+            ]
+        }
+    ];
+
+    function iniciarJogoDefinitivo() {
+        tocarEfeito('martelo');
+        const input = document.getElementById('player-name-input').value;
+        if (input.trim() !== "") playerName = input;
+        document.getElementById('modal-start').style.display = 'none';
+        document.getElementById('player-display').innerText = `Advogado(a): ${playerName}`;
+        renderStats();
+        renderEvent();
+        carregarQuiz();
+        salvarJogo();
+    }
+
+    function mostrarAba(aba) {
+        tocarEfeito('clique');
+        const abas = ['jogo', 'stf', 'luxo', 'concursos', 'estatisticas', 'escritorio', 'juri', 'estudos', 'casos', 'financas'];
+        abas.forEach(a => {
+            const el = document.getElementById('aba-' + a);
+            if(el) el.style.display = a === aba ? 'block' : 'none';
+        });
+    }
+
+    function votarSTF(voto) {
+        tocarEfeito('martelo');
+        if(voto === 'favor') {
+            stats.rep += 15;
+            stats.conx += 10;
+            alert("Voto proferido! A tese prevaleceu por maioria (+15 Reputação).");
+        } else {
+            stats.rep -= 5;
+            stats.conh += 10;
+            alert("Voto divergente registrado com fundamentação doutrinária.");
+        }
+        renderStats();
+        salvarJogo();
+    }
+
+    function comprarLuxo(nome, preco, bonusRep, bonusConx) {
+        if(stats.cap < preco) { alert("Capital insuficiente!"); return; }
+        tocarEfeito('moeda');
+        stats.cap -= preco;
+        stats.rep += bonusRep;
+        stats.conx += bonusConx;
+        alert(`Adquiriu: ${nome}! Prestígio aumentado.`);
+        renderStats();
+        historico.push(`• Compra de Luxo: ${nome}`);
+        atualizarLog();
+        salvarJogo();
+    }
+
+    function alternarTema() {
+        stats.temaClássico = !stats.temaClássico;
+        document.body.className = stats.temaClássico ? 'theme-classic' : '';
+        salvarJogo();
+    }
+
+    function prestarConcurso(cargoDesejado) {
+        if (cargoDesejado === 'promotor' && stats.conh < 50) { alert("Conhecimento insuficiente para Promotor (Exige 50)!"); return; }
+        if (cargoDesejado === 'juiz' && stats.conh < 70) { alert("Conhecimento insuficiente para Juiz (Exige 70)!"); return; }
+        
+        tocarEfeito('martelo');
+        stats.cargo = cargoDesejado === 'promotor' ? "Promotor de Justiça" : "Juiz de Direito";
+        alert(`Parabéns! Foi aprovado no concurso e assumiu o cargo de ${stats.cargo}!`);
+        renderStats();
+        salvarJogo();
+    }
+
+    function descansar() {
+        if (stats.eng >= 100) { alert("A energia já está a 100%!"); return; }
+        stats.eng = Math.min(100, stats.eng + 35);
+        stats.cap -= 100;
+        renderStats();
+        historico.push("• Descansou para recuperar energias (-R$100).");
+        atualizarLog();
+        salvarJogo();
+    }
+
+    function contratarSecretaria() {
+        if (stats.secretaria) { alert("Já contratou uma secretária!"); return; }
+        if (stats.cap < 1000) { alert("Capital insuficiente!"); return; }
+        stats.cap -= 1000;
+        stats.secretaria = true;
+        renderStats();
+        alert("Secretária contratada!");
+        salvarJogo();
+    }
+
+    function contratarEstagiario() {
+        if (stats.cap < 1500) { alert("Capital insuficiente!"); return; }
+        stats.cap -= 1500;
+        stats.estagiarios += 1;
+        renderStats();
+        alert("Estagiário integrado!");
+        salvarJogo();
+    }
+
+    function argumentarJuri(tipo) {
+        tocarEfeito('martelo');
+        juradosFavor = Math.min(7, juradosFavor + 2);
+        let icones = "";
+        for(let i=0; i<7; i++) { icones += i < juradosFavor ? "😄 " : "😐 "; }
+        document.getElementById('juri-icons').innerText = icones;
+        document.getElementById('juri-favor').innerText = juradosFavor;
+
+        if (juradosFavor >= 4) {
+            tocarEfeito('moeda');
+            alert("🏆 RÉU ABSOLVIDO! Vitória no Tribunal do Júri (+R$ 2.000)");
+            stats.cap += 2000;
+            stats.totalGanho += 2000;
+            stats.vitorias++;
+            juradosFavor = 0;
+            renderStats();
+        }
+    }
+
+    function carregarQuiz() {
+        const q = questoesOAB[Math.floor(Math.random() * questoesOAB.length)];
+        document.getElementById('quiz-pergunta').innerText = q.pergunta;
+        const container = document.getElementById('quiz-opcoes');
+        container.innerHTML = '';
+        q.opcoes.forEach((op, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.innerText = op;
+            btn.onclick = () => {
+                if (idx === q.correta) {
+                    tocarEfeito('moeda');
+                    alert("Resposta Correta! (+10 Conhecimento, +R$ 300)");
+                    stats.conh += 10;
+                    stats.cap += 300;
+                    stats.totalGanho += 300;
+                } else {
+                    alert("Resposta Incorreta!");
+                }
+                renderStats();
+                carregarQuiz();
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function investir(valor) {
+        if (stats.cap < valor) { alert("Capital insuficiente!"); return; }
+        stats.cap -= valor;
+        stats.investimentos += Math.floor(valor * 0.12);
+        renderStats();
+        historico.push(`• Realizou investimento de R$${valor}.`);
+        atualizarLog();
+        salvarJogo();
+    }
+
+    function gerarCasoAvulso() {
+        if (stats.eng < 15) { alert("Energia muito baixa!"); return; }
+        stats.eng -= 15;
+        const honorarios = 1000 + (stats.estagiarios * 200);
+        stats.cap += honorarios;
+        stats.totalGanho += honorarios;
+        stats.vitorias++;
+        renderStats();
+        historico.push(`• Concluiu causa avulsa (+R$${honorarios}).`);
+        atualizarLog();
+        salvarJogo();
+    }
+
+    function renderStats() {
+        document.getElementById('st-conh').innerText = stats.conh;
+        document.getElementById('st-rep').innerText = stats.rep;
+        document.getElementById('st-cap').innerText = stats.cap.toLocaleString('pt-BR');
+        document.getElementById('st-conx').innerText = stats.conx;
+        document.getElementById('st-cargo').innerText = stats.cargo;
+        document.getElementById('st-rendimento').innerText = stats.investimentos.toLocaleString('pt-BR');
+        
+        document.getElementById('eq-sec').innerText = stats.secretaria ? "Sim" : "Não";
+        document.getElementById('eq-est').innerText = stats.estagiarios;
+
+        document.getElementById('stats-dashboard').innerHTML = `
+            • Processos Vencidos: <strong>${stats.vitorias}</strong><br>
+            • Infrações OAB: <strong>${stats.infracoesOAB}</strong><br>
+            • Honorários Totais: <strong>R$ ${stats.totalGanho.toLocaleString('pt-BR')}</strong><br>
+            • Status Ético: <strong>${stats.infracoesOAB >= 2 ? "Suspenso" : "Regular"}</strong>
+        `;
+
+        const engEl = document.getElementById('st-eng');
+        engEl.innerText = stats.eng + "%";
+        engEl.style.color = stats.eng < 30 ? "#ef4444" : "#4ade80";
+
+        document.getElementById('game-progress').style.width = Math.min(100, (currentEvent / eventos.length) * 100) + "%";
+    }
+
+    function renderEvent() {
+        if (currentEvent >= eventos.length) {
+            document.getElementById('phase-title').innerText = "JORNADA CONCLUÍDA!";
+            document.getElementById('event-text').innerText = "Parabéns, Dr(a). " + playerName + "! Chegou ao topo da carreira jurídica!";
+            document.getElementById('options-container').innerHTML = "";
+            return;
+        }
+
+        const ev = eventos[currentEvent];
+        document.getElementById('phase-title').innerText = ev.fase;
+        document.getElementById('event-text').innerText = ev.texto;
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        ev.opcoes.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.innerText = `${index + 1}. ${opt.texto}`;
+            btn.onclick = () => escolherOpcao(opt);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function escolherOpcao(opt) {
+        tocarEfeito('clique');
+        if (opt.etica) {
+            stats.infracoesOAB++;
+            alert("⚠️ Atenção! O Tribunal de Ética da OAB registrou uma infração disciplinar por conduta agressiva!");
+        }
+        stats.conh += opt.conh || 0;
+        stats.rep += opt.rep || 0;
+        stats.cap += (opt.cap || 0) + stats.investimentos + (stats.estagiarios * 100);
+        if(opt.cap > 0) stats.totalGanho += opt.cap;
+        stats.conx += opt.conx || 0;
+        stats.eng += (opt.eng || 0) + (stats.secretaria ? 10 : 0);
+
+        renderStats();
+        historico.push(`• ${opt.feedback}`);
+        atualizarLog();
+
+        currentEvent++;
+        salvarJogo();
+        setTimeout(() => { renderEvent(); }, 1600);
+    }
+
+    function atualizarLog() {
+        document.getElementById('log-content').innerHTML = historico.join('<br>');
+    }
+
+    function salvarJogo() {
+        localStorage.setItem('caminhoSTF_ultimate', JSON.stringify({ stats, playerName, currentEvent, historico, juradosFavor }));
+    }
+
+    function exportarSave() {
+        prompt("Código de Save:", btoa(JSON.stringify({ stats, playerName, currentEvent, historico, juradosFavor })));
+    }
+
+    function importarSave() {
+        const code = prompt("Cole o código do Save:");
+        if (code) {
+            try {
+                const data = JSON.parse(atob(code));
+                stats = data.stats; playerName = data.playerName; currentEvent = data.currentEvent; historico = data.historico; juradosFavor = data.juradosFavor;
+                salvarJogo(); location.reload();
+            } catch(e) { alert("Código inválido!"); }
+        }
+    }
+
+    function carregarJogo() {
+        const saved = localStorage.getItem('caminhoSTF_ultimate');
+        if (saved) {
+            const data = JSON.parse(saved);
+            stats = data.stats; playerName = data.playerName; currentEvent = data.currentEvent; historico = data.historico || []; juradosFavor = data.juradosFavor || 0;
+            if(stats.temaClássico) document.body.className = 'theme-classic';
+            document.getElementById('modal-start').style.display = 'none';
+            document.getElementById('player-display').innerText = `Advogado(a): ${playerName}`;
+            atualizarLog(); renderEvent(); carregarQuiz(); renderStats();
+            return true;
+        }
+        return false;
+    }
+
+    function resetarCarreira() {
+        if (confirm("Deseja reiniciar a carreira do zero?")) {
+            localStorage.removeItem('caminhoSTF_ultimate');
+            location.reload();
+        }
+    }
+
+    window.onload = function() { if (!carregarJogo()) { renderStats(); } };
+</script>
+
+</body>
+</html>
