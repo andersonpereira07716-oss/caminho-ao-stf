@@ -43,6 +43,11 @@
         .toast { display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; }
         
         .audio-toggle { background: none; border: 1px solid #334155; color: #94a3b8; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
+
+        .start-screen { text-align: center; }
+        .profile-select { display: flex; flex-direction: column; gap: 8px; margin: 15px 0; }
+        .profile-card { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .profile-card:hover { border-color: #38bdf8; background: #1e293b; }
     </style>
 </head>
 <body>
@@ -50,45 +55,67 @@
     <div class="game-container" id="app">
         <div class="toast" id="toast"></div>
 
-        <h1>⚖️ Caminho ao STF</h1>
-        <div class="profile-bar">
-            <span>Gabinete 01 • <b class="badge" id="perfil-tag">Garantista</b></span>
-            <button class="audio-toggle" id="btn-audio" onclick="toggleAudio()">🔊 Som: OFF</button>
-        </div>
-
-        <div class="stats-grid">
-            <div>⚖️ Prestígio<span class="stat-val" id="prestigio">50</span></div>
-            <div>📢 Opinião<span class="stat-val" id="pop">50%</span></div>
-            <div>📂 Processos<span class="stat-val" id="pendentes">120</span></div>
-            <div>🏆 Recorde<span class="stat-val" id="recorde">0</span></div>
-        </div>
-
-        <div class="timer-bar"><div class="timer-progress" id="timer"></div></div>
-
-        <div class="news-banner" id="noticia-box">
-            📰 <span><b>Mídia:</b> Plenário prepara pauta de julgamentos decisivos.</span>
-        </div>
-
-        <div class="question-box" id="pergunta">A carregar o caso...</div>
-
-        <div class="skills-section">
-            <div class="skills-title">Ações do Gabinete</div>
-            <div class="skills-btns">
-                <button class="btn-skill" id="skill-vista" onclick="usarPedidoDeVista()">⏳ Pedir Vista (-20)</button>
-                <button class="btn-skill" id="skill-sumula" onclick="usarSumula()">📜 Súmula (+10)</button>
-                <button class="btn-skill" id="skill-audiencia" onclick="convocarAudiencia()">🗣️ Audiência Pública</button>
+        <div id="start-view" class="start-screen">
+            <h1>⚖️ Caminho ao STF</h1>
+            <p style="font-size:0.85rem; color:#94a3b8; margin-top:6px;">Escolha o perfil da sua gestão no Plenário:</p>
+            
+            <div class="profile-select">
+                <div class="profile-card" onclick="iniciarComPerfil('Garantista', 50, 60, 120)">
+                    <b style="color:#38bdf8;">🛡️ Garantista</b>
+                    <p style="font-size:0.75rem; color:#94a3b8;">Foco na defesa dos direitos individuais. (+10% Opinião Popular)</p>
+                </div>
+                <div class="profile-card" onclick="iniciarComPerfil('Textualista', 60, 50, 120)">
+                    <b style="color:#38bdf8;">📜 Textualista</b>
+                    <p style="font-size:0.75rem; color:#94a3b8;">Foco na aplicação estrita da lei. (+10 Prestígio)</p>
+                </div>
+                <div class="profile-card" onclick="iniciarComPerfil('Eficiente', 50, 50, 90)">
+                    <b style="color:#38bdf8;">⚡ Gestor Eficiente</b>
+                    <p style="font-size:0.75rem; color:#94a3b8;">Foco na celeridade e organização. (-30 Processos Iniciais)</p>
+                </div>
             </div>
         </div>
 
-        <div class="vote-box">
-            <span>Plenário do STF (11 Ministros)</span>
-            <div class="vote-dots" id="colegiado-dots">
-                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div id="game-view" style="display:none;">
+            <h1>⚖️ Caminho ao STF</h1>
+            <div class="profile-bar">
+                <span>Gabinete 01 • <b class="badge" id="perfil-tag">Garantista</b></span>
+                <button class="audio-toggle" id="btn-audio" onclick="toggleAudio()">🔊 Som: OFF</button>
             </div>
-        </div>
 
-        <div id="opcoes"></div>
+            <div class="stats-grid">
+                <div>⚖️ Prestígio<span class="stat-val" id="prestigio">50</span></div>
+                <div>📢 Opinião<span class="stat-val" id="pop">50%</span></div>
+                <div>📂 Processos<span class="stat-val" id="pendentes">120</span></div>
+                <div>🏆 Recorde<span class="stat-val" id="recorde">0</span></div>
+            </div>
+
+            <div class="timer-bar"><div class="timer-progress" id="timer"></div></div>
+
+            <div class="news-banner" id="noticia-box">
+                📰 <span><b>Mídia:</b> Plenário prepara pauta de julgamentos decisivos.</span>
+            </div>
+
+            <div class="question-box" id="pergunta">A carregar o caso...</div>
+
+            <div class="skills-section">
+                <div class="skills-title">Ações do Gabinete</div>
+                <div class="skills-btns">
+                    <button class="btn-skill" id="skill-vista" onclick="usarPedidoDeVista()">⏳ Pedir Vista (-20)</button>
+                    <button class="btn-skill" id="skill-sumula" onclick="usarSumula()">📜 Súmula (+10)</button>
+                    <button class="btn-skill" id="skill-audiencia" onclick="convocarAudiencia()">🗣️ Audiência Pública</button>
+                </div>
+            </div>
+
+            <div class="vote-box">
+                <span>Plenário do STF (11 Ministros)</span>
+                <div class="vote-dots" id="colegiado-dots">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+
+            <div id="opcoes"></div>
+        </div>
     </div>
 
     <script>
@@ -96,6 +123,7 @@
         let prestigio = 50;
         let opiniao = 50;
         let processos = 120;
+        let perfilAtual = "Garantista";
         let audioAtivo = false;
         let tempoRestante = 15;
         let timerInterval = null;
@@ -124,6 +152,18 @@
             tocarSom(600, 'triangle', 0.15);
         }
 
+        function iniciarComPerfil(nome, p, o, proc) {
+            perfilAtual = nome;
+            prestigio = p;
+            opiniao = o;
+            processos = proc;
+            document.getElementById("perfil-tag").innerText = nome;
+            document.getElementById("start-view").style.display = "none";
+            document.getElementById("game-view").style.display = "block";
+            tocarSom(520, 'sine', 0.2);
+            renderizarJogo();
+        }
+
         const casos = [
             {
                 noticia: "Jornais destacam tensão entre os poderes sobre o orçamento de saúde.",
@@ -145,17 +185,26 @@
             },
             {
                 noticia: "Big Techs e órgãos reguladores acompanham debate sobre dados e IA.",
-                texto: "Ação direta questiona a recolha automatizada de dados biométricos sem consentimento prévio. Como decidir?",
+                texto: "Ação direta questiona a recolha automatizada de dados biométricos sem consentimento. Como decidir?",
                 dica: "💡 Perito indica: Defesa da privacidade gera precedentes globais.",
                 opcoes: [
                     { texto: "Suspender a recolha até regulamentação estrita.", prest: +15, pop: +10, proc: -15, favoraveis: 8, msg: "Marco da proteção de dados estabelecido!" },
-                    { texto: "Permitir a recolha para incentivar o desenvolvimento tecnológico.", prest: -5, pop: -15, proc: -5, favoraveis: 5, msg: "Criticado por defensores da privacidade." }
+                    { texto: "Permitir a recolha para incentivar a tecnologia.", prest: -5, pop: -15, proc: -5, favoraveis: 5, msg: "Criticado por defensores da privacidade." }
+                ]
+            },
+            {
+                noticia: "ONGs ambientais e agronegócio aguardam julgamento sobre demarcação territorial.",
+                texto: "Ação aborda a aplicação da tese do marco temporal em terras de preservação. Qual o posicionamento?",
+                dica: "💡 Perito indica: Julgamento com imensa repercussão internacional.",
+                opcoes: [
+                    { texto: "Afastar o marco temporal em favor da proteção constitucional.", prest: +10, pop: +15, proc: -20, favoraveis: 7, msg: "Elogiado por entidades internacionais!" },
+                    { texto: "Validar o marco temporal para segurança jurídica fundiária.", prest: +10, pop: -15, proc: -10, favoraveis: 6, msg: "Apoiado pelo setor produtivo." }
                 ]
             },
             {
                 noticia: "Mercado financeiro e juristas aguardam definição jurisprudencial.",
-                texto: "[Consequência Final] Recurso vinculante exige pacificação definitiva da matéria constitucional. Como proceder?",
-                dica: "💡 Perito indica: Julgamento decisivo do mandato.",
+                texto: "[Consequência Final] Recurso vinculante exige pacificação definitiva das teses constitucionais do mandato. Como proceder?",
+                dica: "💡 Perito indica: Voto decisivo da gestão.",
                 opcoes: [
                     { texto: "Fixar tese abrangente e pacificar o tema geral.", prest: +15, pop: +5, proc: -30, favoraveis: 9, msg: "Precedente histórico estabelecido!" },
                     { texto: "Limitar o veredito estritamente ao caso concreto.", prest: +0, pop: -5, proc: +10, favoraveis: 5, msg: "Decisão conservadora aplicada." }
@@ -196,6 +245,16 @@
             document.getElementById("skill-audiencia").disabled = true;
         }
 
+        function partilharResultado() {
+            const texto = `🏛️ Caminho ao STF\nFiz um mandato como Ministro ${perfilAtual}!\n🏆 Prestígio: ${prestigio}\n👥 Aprovação: ${opiniao}%\nJogue também!`;
+            if (navigator.share) {
+                navigator.share({ title: 'Caminho ao STF', text: texto });
+            } else {
+                navigator.clipboard.writeText(texto);
+                mostrarToast("📋 Resultado copiado para a área de transferência!");
+            }
+        }
+
         function renderizarJogo() {
             document.getElementById("recorde").innerText = recorde;
             if (turno < casos.length) {
@@ -225,9 +284,11 @@
                 clearInterval(timerInterval);
                 tocarSom(800, 'square', 0.4);
                 
+                let novoRecorde = false;
                 if (prestigio > recorde) {
                     recorde = prestigio;
                     localStorage.setItem("stf_recorde", recorde);
+                    novoRecorde = true;
                 }
 
                 let finalTitulo = "⚖️ Ministro Equilibrado";
@@ -245,6 +306,7 @@
                     <div style="text-align:center; margin: 12px 0; background:#0f172a; padding:12px; border-radius:10px;">
                         <h2 style="color:#38bdf8; margin: 6px 0; font-size:1.05rem;">${finalTitulo}</h2>
                         <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:8px;">${finalDesc}</p>
+                        ${novoRecorde ? '<p style="color:#22c55e; font-weight:bold; font-size:0.8rem;">🎉 NOVO RECORDE HISTÓRICO!</p>' : ''}
                         <hr style="border-color:#334155; margin:8px 0;">
                         <p style="text-align:left; font-size:0.8rem; line-height:1.5;">
                             🏆 <b>Prestígio Final:</b> ${prestigio}<br>
@@ -253,7 +315,8 @@
                             📂 <b>Processos Restantes:</b> ${processos}
                         </p>
                     </div>
-                    <button class="option-btn" style="text-align:center" onclick="location.reload()">Jogar Novamente</button>
+                    <button class="option-btn" style="text-align:center; background:#16a34a;" onclick="partilharResultado()">📲 Partilhar Resultado</button>
+                    <button class="option-btn" style="text-align:center;" onclick="location.reload()">Jogar Novamente</button>
                 `;
             }
         }
@@ -290,8 +353,6 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
-
-        renderizarJogo();
     </script>
 </body>
 </html>
