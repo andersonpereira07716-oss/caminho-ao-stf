@@ -40,6 +40,8 @@
         button.option-btn { background: #2563eb; color: white; border: none; padding: 10px 12px; width: 100%; border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; cursor: pointer; text-align: left; transition: background 0.2s; line-height: 1.3; }
         button.option-btn:hover { background: #1d4ed8; }
 
+        .btn-install { background: #16a34a; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 10px; font-size: 0.85rem; cursor: pointer; display: none; }
+
         .toast { display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; }
         
         .audio-toggle { background: none; border: 1px solid #334155; color: #94a3b8; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
@@ -61,6 +63,7 @@
 
         <div id="start-view" class="start-screen">
             <h1>⚖️ Caminho ao STF</h1>
+            <button id="btnPwaInstall" class="btn-install" onclick="instalarPWA()">📲 Instalar Aplicativo no Telemóvel</button>
             <p style="font-size:0.85rem; color:#94a3b8; margin-top:6px;">Escolha o perfil da sua gestão no Plenário:</p>
             
             <div class="profile-select">
@@ -128,6 +131,26 @@
     </div>
 
     <script>
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btn = document.getElementById('btnPwaInstall');
+            if (btn) btn.style.display = 'block';
+        });
+
+        function instalarPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('btnPwaInstall').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
         let turno = 0;
         let prestigio = 50;
         let opiniao = 50;
