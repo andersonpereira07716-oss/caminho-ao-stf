@@ -48,6 +48,9 @@
         .profile-select { display: flex; flex-direction: column; gap: 8px; margin: 15px 0; }
         .profile-card { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
         .profile-card:hover { border-color: #38bdf8; background: #1e293b; }
+
+        .history-list { text-align: left; background: #0f172a; padding: 10px; border-radius: 8px; font-size: 0.75rem; max-height: 120px; overflow-y: auto; margin-top: 8px; border: 1px solid #334155; }
+        .history-item { margin-bottom: 4px; color: #cbd5e1; border-bottom: 1px solid #1e293b; padding-bottom: 2px; }
     </style>
 </head>
 <body>
@@ -128,6 +131,7 @@
         let tempoRestante = 15;
         let timerInterval = null;
         let recorde = localStorage.getItem("stf_recorde") || 0;
+        let historicoVotos = [];
 
         function tocarSom(frequencia = 440, tipo = 'sine', duracao = 0.1) {
             if (!audioAtivo) return;
@@ -231,6 +235,7 @@
                     clearInterval(timerInterval);
                     mostrarToast("⏳ Tempo esgotado! Abstenção (-10 Prestígio)");
                     prestigio = Math.max(0, prestigio - 10);
+                    historicoVotos.push(`Turno ${turno + 1}: Abstenção por tempo esgotado`);
                     turno++;
                     renderizarJogo();
                 }
@@ -307,6 +312,8 @@
                     finalDesc = "As suas decisões tornaram-se referência obrigatória nas faculdades de Direito.";
                 }
 
+                let historicoHTML = historicoVotos.map(v => `<div class="history-item">• ${v}</div>`).join('');
+
                 document.getElementById("app").innerHTML = `
                     <h1>🏛️ Mandato Concluído!</h1>
                     <div style="text-align:center; margin: 12px 0; background:#0f172a; padding:12px; border-radius:10px;">
@@ -320,6 +327,8 @@
                             👥 <b>Aprovação Popular:</b> ${opiniao}%<br>
                             📂 <b>Processos Restantes:</b> ${processos}
                         </p>
+                        <p style="text-align:left; font-size:0.75rem; color:#94a3b8; margin-top:8px; font-weight:bold;">Relatório de Decisões:</p>
+                        <div class="history-list">${historicoHTML}</div>
                     </div>
                     <button class="option-btn" style="text-align:center; background:#16a34a;" onclick="partilharResultado()">📲 Partilhar Resultado</button>
                     <button class="option-btn" style="text-align:center;" onclick="location.reload()">Jogar Novamente</button>
@@ -333,6 +342,7 @@
             prestigio += op.prest;
             opiniao = Math.min(100, Math.max(0, opiniao + op.pop));
             processos = Math.max(0, processos + op.proc);
+            historicoVotos.push(op.texto);
             mostrarToast(op.msg);
             turno++;
             setTimeout(renderizarJogo, 400);
