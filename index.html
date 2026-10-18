@@ -146,6 +146,12 @@
             } catch(e) {}
         }
 
+        function tocarSomMartelo() {
+            if (!audioAtivo) return;
+            tocarSom(180, 'square', 0.08);
+            setTimeout(() => tocarSom(120, 'sine', 0.15), 50);
+        }
+
         function toggleAudio() {
             audioAtivo = !audioAtivo;
             document.getElementById("btn-audio").innerText = audioAtivo ? "🔊 Som: ON" : "🔊 Som: OFF";
@@ -160,7 +166,7 @@
             document.getElementById("perfil-tag").innerText = nome;
             document.getElementById("start-view").style.display = "none";
             document.getElementById("game-view").style.display = "block";
-            tocarSom(520, 'sine', 0.2);
+            tocarSomMartelo();
             renderizarJogo();
         }
 
@@ -207,7 +213,7 @@
                 dica: "💡 Perito indica: Voto decisivo da gestão.",
                 opcoes: [
                     { texto: "Fixar tese abrangente e pacificar o tema geral.", prest: +15, pop: +5, proc: -30, favoraveis: 9, msg: "Precedente histórico estabelecido!" },
-                    { texto: "Limitar o veredito estritamente ao caso concreto.", prest: +0, pop: -5, proc: +10, favoraveis: 5, msg: "Decisão conservadora aplicada." }
+                    { texto: "Abrir divergência e fixar tese estrita ao caso concreto.", prest: +5, pop: -5, proc: +10, favoraveis: 5, msg: "Divergência mantida em julgamento." }
                 ]
             }
         ];
@@ -282,7 +288,7 @@
                 });
             } else {
                 clearInterval(timerInterval);
-                tocarSom(800, 'square', 0.4);
+                tocarSomMartelo();
                 
                 let novoRecorde = false;
                 if (prestigio > recorde) {
@@ -323,7 +329,7 @@
 
         function tomarDecisao(op) {
             clearInterval(timerInterval);
-            tocarSom(350, 'sine', 0.15);
+            tocarSomMartelo();
             prestigio += op.prest;
             opiniao = Math.min(100, Math.max(0, opiniao + op.pop));
             processos = Math.max(0, processos + op.proc);
