@@ -3,425 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caminho ao STF - Edição Suprema</title>
-    
+    <title>Caminho ao STF</title>
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a202c">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; }
-        .game-container { background: #1e293b; width: 100%; max-width: 480px; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); border: 1px solid #334155; position: relative; }
-        h1 { font-size: 1.4rem; margin-bottom: 6px; color: #38bdf8; text-align: center; font-weight: 700; }
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- CONTAINER DO JOGO -->
+    <div id="game-card" class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-3xl p-6 max-w-md w-full shadow-2xl relative">
         
-        .profile-bar { text-align: center; font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 6px 10px; border-radius: 8px; }
-        .badge { background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; }
+        <!-- CABEÇALHO DO JOGO -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold tracking-tight text-sky-400 flex items-center justify-center gap-2">
+                ⚖️ Caminho ao STF
+            </h1>
+            <p id="subtitulo-perfil" class="text-xs text-slate-400 mt-1">Escolha o perfil da sua gestão no Plenário:</p>
+        </div>
 
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 0.75rem; text-align: center; border: 1px solid #334155; }
-        .stat-val { font-weight: bold; color: #38bdf8; display: block; font-size: 0.9rem; }
+        <!-- SELEÇÃO DE PERFIL INICIAL -->
+        <div id="tela-perfil" class="space-y-3">
+            <button onclick="iniciarPerfil('Garantista')" class="w-full text-left p-3.5 bg-slate-700/50 hover:bg-slate-700 border border-slate-600 rounded-2xl transition-all">
+                <div class="font-bold text-sky-300">🛡️ Garantista</div>
+                <div class="text-xs text-slate-400">Foco na defesa dos direitos individuais. (+10% Opinião Popular)</div>
+            </button>
+            <button onclick="iniciarPerfil('Textualista')" class="w-full text-left p-3.5 bg-slate-700/50 hover:bg-slate-700 border border-slate-600 rounded-2xl transition-all">
+                <div class="font-bold text-amber-300">📜 Textualista</div>
+                <div class="text-xs text-slate-400">Foco na aplicação estrita da lei. (+10 Prestígio)</div>
+            </button>
+            <button onclick="iniciarPerfil('Gestor Eficiente')" class="w-full text-left p-3.5 bg-slate-700/50 hover:bg-slate-700 border border-slate-600 rounded-2xl transition-all">
+                <div class="font-bold text-emerald-300">⚡ Gestor Eficiente</div>
+                <div class="text-xs text-slate-400">Foco na celeridade e organização. (-30 Processos Iniciais)</div>
+            </button>
+            <button onclick="iniciarPerfil('Pragmatista')" class="w-full text-left p-3.5 bg-slate-700/50 hover:bg-slate-700 border border-slate-600 rounded-2xl transition-all">
+                <div class="font-bold text-indigo-300">🏛️ Pragmatista</div>
+                <div class="text-xs text-slate-400">Foco no equilíbrio institucional e conciliação.</div>
+            </button>
+        </div>
 
-        .timer-bar { width: 100%; height: 6px; background: #334155; border-radius: 3px; margin-bottom: 10px; overflow: hidden; }
-        .timer-progress { height: 100%; background: #ef4444; width: 100%; transition: width 1s linear; }
-
-        .news-banner { background: #451a03; border-left: 4px solid #f97316; color: #ffedd5; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-
-        .question-box { background: #334155; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-size: 0.9rem; line-height: 1.4; border-left: 4px solid #38bdf8; }
-
-        .skills-section { margin-bottom: 10px; background: #0f172a; padding: 8px 10px; border-radius: 10px; }
-        .skills-title { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
-        .skills-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        .btn-skill { background: #0284c7; color: white; border: none; padding: 6px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
-        .btn-skill:disabled { background: #475569; opacity: 0.5; cursor: not-allowed; }
-
-        .vote-box { background: #0f172a; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 0.75rem; text-align: center; }
-        .vote-dots { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
-        .dot { width: 9px; height: 9px; border-radius: 50%; background: #475569; transition: transform 0.2s, background 0.3s; }
-        .dot.yes { background: #22c55e; transform: scale(1.1); }
-        .dot.no { background: #ef4444; transform: scale(1.1); }
-
-        button.option-btn { background: #2563eb; color: white; border: none; padding: 10px 12px; width: 100%; border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; cursor: pointer; text-align: left; transition: background 0.2s; line-height: 1.3; }
-        button.option-btn:hover { background: #1d4ed8; }
-
-        .btn-install { background: #16a34a; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 10px; font-size: 0.85rem; cursor: pointer; display: none; }
-
-        .toast { display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; }
-        
-        .audio-toggle { background: none; border: 1px solid #334155; color: #94a3b8; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
-
-        .start-screen { text-align: center; }
-        .profile-select { display: flex; flex-direction: column; gap: 8px; margin: 15px 0; }
-        .profile-card { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
-        .profile-card:hover { border-color: #38bdf8; background: #1e293b; }
-
-        .history-list { text-align: left; background: #0f172a; padding: 10px; border-radius: 8px; font-size: 0.75rem; max-height: 100px; overflow-y: auto; margin-top: 6px; border: 1px solid #334155; }
-        .history-item { margin-bottom: 4px; color: #cbd5e1; border-bottom: 1px solid #1e293b; padding-bottom: 2px; }
-        .badge-achievement { background: #15803d; color: #f0fdf4; padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; display: inline-block; margin: 2px; }
-    </style>
-<link rel="manifest" href="/manifest.json"><link rel="icon" href="/icon-192.png"><link rel="apple-touch-icon" href="/icon-192.png"><meta name="theme-color" content="#1a202c"><script>if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js")</script></head>
-<body>
-
-    <div class="game-container" id="app">
-        <div class="toast" id="toast"></div>
-
-        <div id="start-view" class="start-screen">
-            <h1>⚖️ Caminho ao STF</h1>
-            <button id="btnPwaInstall" class="btn-install" onclick="instalarPWA()">📲 Instalar Aplicativo no Telemóvel</button>
-            <p style="font-size:0.85rem; color:#94a3b8; margin-top:6px;">Escolha o perfil da sua gestão no Plenário:</p>
+        <!-- TELA DO JOGO (PAINEL DE GESTÃO E VOTAÇÃO) -->
+        <div id="tela-jogo" class="hidden space-y-4">
             
-            <div class="profile-select">
-                <div class="profile-card" onclick="iniciarComPerfil('Garantista', 50, 60, 120)">
-                    <b style="color:#38bdf8;">🛡️ Garantista</b>
-                    <p style="font-size:0.75rem; color:#94a3b8;">Foco na defesa dos direitos individuais. (+10% Opinião Popular)</p>
+            <!-- STATUS -->
+            <div class="grid grid-cols-4 gap-2 bg-slate-900/60 p-3 rounded-2xl border border-slate-700/50 text-center text-xs">
+                <div>
+                    <div class="text-slate-400">⚖️ Prestígio</div>
+                    <div id="val-prestigio" class="font-bold text-sky-400 text-sm">50</div>
                 </div>
-                <div class="profile-card" onclick="iniciarComPerfil('Textualista', 60, 50, 120)">
-                    <b style="color:#38bdf8;">📜 Textualista</b>
-                    <p style="font-size:0.75rem; color:#94a3b8;">Foco na aplicação estrita da lei. (+10 Prestígio)</p>
+                <div>
+                    <div class="text-slate-400">📢 Opinião</div>
+                    <div id="val-opiniao" class="font-bold text-amber-400 text-sm">60%</div>
                 </div>
-                <div class="profile-card" onclick="iniciarComPerfil('Eficiente', 50, 50, 90)">
-                    <b style="color:#38bdf8;">⚡ Gestor Eficiente</b>
-                    <p style="font-size:0.75rem; color:#94a3b8;">Foco na celeridade e organização. (-30 Processos Iniciais)</p>
+                <div>
+                    <div class="text-slate-400">📁 Processos</div>
+                    <div id="val-processos" class="font-bold text-rose-400 text-sm">120</div>
                 </div>
-                <div class="profile-card" onclick="iniciarComPerfil('Pragmatista', 55, 55, 100)">
-                    <b style="color:#38bdf8;">🏛️ Pragmatista</b>
-                    <p style="font-size:0.75rem; color:#94a3b8;">Foco no equilíbrio institucional e conciliação.</p>
+                <div>
+                    <div class="text-slate-400">🏆 Recorde</div>
+                    <div id="val-recorde" class="font-bold text-emerald-400 text-sm">0</div>
                 </div>
+            </div>
+
+            <!-- CARD DA CASUÍSTICA/PROCESSO -->
+            <div class="bg-slate-700/40 p-4 rounded-2xl border border-slate-600/50 space-y-3">
+                <div id="noticia-alerta" class="text-xs bg-amber-950/40 border border-amber-600/40 text-amber-300 p-2 rounded-xl flex items-center gap-2">
+                    📰 Jornais destacam tensão entre os poderes sobre o orçamento de saúde.
+                </div>
+                <p id="texto-caso" class="text-sm font-medium text-slate-200">
+                    Um recurso extraordinário exige que o Estado forneça medicamentos de alto custo não homologados. Qual a sua tese?
+                </p>
+            </div>
+
+            <!-- AÇÕES DO GABINETE -->
+            <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                <button onclick="acaoGabinete('vista')" class="py-2.5 bg-slate-700/80 hover:bg-slate-700 text-sky-300 rounded-xl border border-slate-600">⏳ Pedir Vista (-20)</button>
+                <button onclick="acaoGabinete('sumula')" class="py-2.5 bg-slate-700/80 hover:bg-slate-700 text-amber-300 rounded-xl border border-slate-600">📜 Súmula (+10)</button>
+            </div>
+
+            <!-- BOTÕES DE DECISÃO -->
+            <div class="space-y-2 pt-2">
+                <button onclick="votar(1)" id="btn-opcao1" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl text-xs transition-all text-left">
+                    Garantir o direito à saúde integral imediatamente.
+                </button>
+                <button onclick="votar(2)" id="btn-opcao2" class="w-full py-3 px-4 bg-blue-600/80 hover:bg-blue-600 text-white font-bold rounded-2xl text-xs transition-all text-left">
+                    Exigir critérios técnicos e orçamentários estritos.
+                </button>
+            </div>
+
+            <!-- BARRA FREEMIUM / RECOMPENSAS -->
+            <div class="mt-4 pt-3 border-t border-slate-700/60 grid grid-cols-2 gap-2">
+                <button onclick="FreemiumSystem.exibirAnuncioRecompensa('prestigio')" class="py-2 px-3 bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all">
+                    🎬 +20 Prestígio (Ad)
+                </button>
+                <button onclick="FreemiumSystem.comprarVIP()" class="py-2 px-3 bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-400/50 text-indigo-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all">
+                    👑 Virar VIP (R$ 9,90)
+                </button>
             </div>
         </div>
 
-        <div id="game-view" style="display:none;">
-            <h1>⚖️ Caminho ao STF</h1>
-            <div class="profile-bar">
-                <span>Gabinete 01 • <b class="badge" id="perfil-tag">Garantista</b></span>
-                <button class="audio-toggle" id="btn-audio" onclick="toggleAudio()">🔊 Som: OFF</button>
-            </div>
-
-            <div class="stats-grid">
-                <div>⚖️ Prestígio<span class="stat-val" id="prestigio">50</span></div>
-                <div>📢 Opinião<span class="stat-val" id="pop">50%</span></div>
-                <div>📂 Processos<span class="stat-val" id="pendentes">120</span></div>
-                <div>🏆 Recorde<span class="stat-val" id="recorde">0</span></div>
-            </div>
-
-            <div class="timer-bar"><div class="timer-progress" id="timer"></div></div>
-
-            <div class="news-banner" id="noticia-box">
-                📰 <span><b>Mídia:</b> Plenário prepara pauta de julgamentos decisivos.</span>
-            </div>
-
-            <div class="question-box" id="pergunta">A carregar o caso...</div>
-
-            <div class="skills-section">
-                <div class="skills-title">Ações do Gabinete</div>
-                <div class="skills-btns">
-                    <button class="btn-skill" id="skill-vista" onclick="usarPedidoDeVista()">⏳ Pedir Vista (-20)</button>
-                    <button class="btn-skill" id="skill-sumula" onclick="usarSumula()">📜 Súmula (+10)</button>
-                    <button class="btn-skill" id="skill-audiencia" onclick="convocarAudiencia()">🗣️ Audiência Pública</button>
-                    <button class="btn-skill" id="skill-juiz" onclick="nomearJuizAuxiliar()">👨‍⚖️ Juiz Auxiliar (-15 Pr.)</button>
-                </div>
-            </div>
-
-            <div class="vote-box">
-                <span>Plenário do STF (11 Ministros)</span>
-                <div class="vote-dots" id="colegiado-dots">
-                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-                </div>
-            </div>
-
-            <div id="opcoes"></div>
-        </div>
     </div>
 
+    <script src="freemium.js"></script>
     <script>
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const btn = document.getElementById('btnPwaInstall');
-            if (btn) btn.style.display = 'block';
-        });
+        let prestigio = 50, opiniao = 60, processos = 120, recorde = 0;
 
-        function instalarPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        document.getElementById('btnPwaInstall').style.display = 'none';
-                    }
-                    deferredPrompt = null;
-                });
+        function iniciarPerfil(nome) {
+            document.getElementById('tela-perfil').classList.add('hidden');
+            document.getElementById('subtitulo-perfil').classList.add('hidden');
+            document.getElementById('tela-jogo').classList.remove('hidden');
+            atualizarInterface();
+        }
+
+        function atualizarInterface() {
+            document.getElementById('val-prestigio').innerText = prestigio;
+            document.getElementById('val-opiniao').innerText = opiniao + '%';
+            document.getElementById('val-processos').innerText = processos;
+            document.getElementById('val-recorde').innerText = recorde;
+        }
+
+        function acaoGabinete(tipo) {
+            if (tipo === 'vista') {
+                processos = Math.max(0, processos - 20);
+            } else if (tipo === 'sumula') {
+                prestigio += 10;
             }
+            atualizarInterface();
         }
 
-        let turno = 0;
-        let prestigio = 50;
-        let opiniao = 50;
-        let processos = 120;
-        let perfilAtual = "Garantista";
-        let audioAtivo = false;
-        let tempoRestante = 15;
-        let timerInterval = null;
-        let recorde = localStorage.getItem("stf_recorde") || 0;
-        let historicoVotos = [];
-        let juizAuxiliarAtivo = false;
-
-        function tocarSom(frequencia = 440, tipo = 'sine', duracao = 0.1) {
-            if (!audioAtivo) return;
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = tipo;
-                osc.frequency.value = frequencia;
-                gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duracao);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + duracao);
-            } catch(e) {}
-        }
-
-        function tocarSomMartelo() {
-            if (!audioAtivo) return;
-            tocarSom(180, 'square', 0.08);
-            setTimeout(() => tocarSom(120, 'sine', 0.15), 50);
-        }
-
-        function toggleAudio() {
-            audioAtivo = !audioAtivo;
-            document.getElementById("btn-audio").innerText = audioAtivo ? "🔊 Som: ON" : "🔊 Som: OFF";
-            tocarSom(600, 'triangle', 0.15);
-        }
-
-        function iniciarComPerfil(nome, p, o, proc) {
-            perfilAtual = nome;
-            prestigio = p;
-            opiniao = o;
-            processos = proc;
-            document.getElementById("perfil-tag").innerText = nome;
-            document.getElementById("start-view").style.display = "none";
-            document.getElementById("game-view").style.display = "block";
-            tocarSomMartelo();
-            renderizarJogo();
-        }
-
-        const casos = [
-            {
-                noticia: "Jornais destacam tensão entre os poderes sobre o orçamento de saúde.",
-                texto: "Um recurso extraordinário exige que o Estado forneça medicamentos de alto custo não homologados. Qual a sua tese?",
-                dica: "💡 Perito indica: A população apoia forte investimento em saúde.",
-                opcoes: [
-                    { texto: "Garantir o direito à saúde integral imediatamente.", prest: +5, pop: +15, proc: -15, favoraveis: 7, msg: "Apoio popular em alta!" },
-                    { texto: "Exigir critérios técnicos e orçamentários estritos.", prest: +12, pop: -10, proc: -5, favoraveis: 6, msg: "Aprovado pelos tribunais inferiores." }
-                ]
-            },
-            {
-                noticia: "Protestos em todo o país cobram maior transparência nas decisões públicas.",
-                texto: "Impugnação de uma lei sobre sigilo fiscal de autoridades chega ao seu gabinete. Como votar?",
-                dica: "💡 Perito indica: Sociedade civil pressiona pelo fim do sigilo.",
-                opcoes: [
-                    { texto: "Derrubar o sigilo com base na transparência ampla.", prest: +10, pop: +20, proc: -10, favoraveis: 8, msg: "Transparência fortalecida!" },
-                    { texto: "Manter o sigilo para proteger a segurança institucional.", prest: -5, pop: -20, proc: -5, favoraveis: 4, msg: "Repercussão negativa na imprensa." }
-                ]
-            },
-            {
-                noticia: "Big Techs e órgãos reguladores acompanham debate sobre dados e IA.",
-                texto: "Ação direta questiona a recolha automatizada de dados biométricos sem consentimento. Como decidir?",
-                dica: "💡 Perito indica: Defesa da privacidade gera precedentes globais.",
-                opcoes: [
-                    { texto: "Suspender a recolha até regulamentação estrita.", prest: +15, pop: +10, proc: -15, favoraveis: 8, msg: "Marco da proteção de dados estabelecido!" },
-                    { texto: "Permitir a recolha para incentivar a tecnologia.", prest: -5, pop: -15, proc: -5, favoraveis: 5, msg: "Criticado por defensores da privacidade." }
-                ]
-            },
-            {
-                noticia: "ONGs ambientais e agronegócio aguardam julgamento sobre demarcação territorial.",
-                texto: "Ação aborda a aplicação da tese do marco temporal em terras de preservação. Qual o posicionamento?",
-                dica: "💡 Perito indica: Julgamento com imensa repercussão internacional.",
-                opcoes: [
-                    { texto: "Afastar o marco temporal em favor da proteção constitucional.", prest: +10, pop: +15, proc: -20, favoraveis: 7, msg: "Elogiado por entidades internacionais!" },
-                    { texto: "Validar o marco temporal para segurança jurídica fundiária.", prest: +10, pop: -15, proc: -10, favoraveis: 6, msg: "Apoiado pelo setor produtivo." }
-                ]
-            },
-            {
-                noticia: "Mercado financeiro e juristas aguardam definição jurisprudencial.",
-                texto: "[Consequência Final] Recurso vinculante exige pacificação definitiva das teses constitucionais do mandato. Como proceder?",
-                dica: "💡 Perito indica: Voto decisivo da gestão.",
-                opcoes: [
-                    { texto: "Fixar tese abrangente e pacificar o tema geral.", prest: +15, pop: +5, proc: -30, favoraveis: 9, msg: "Precedente histórico estabelecido!" },
-                    { texto: "Abrir divergência e fixar tese estrita ao caso concreto.", prest: +5, pop: -5, proc: +10, favoraveis: 5, msg: "Divergência mantida em julgamento." }
-                ]
-            }
-        ];
-
-        function iniciarTimer() {
-            clearInterval(timerInterval);
-            tempoRestante = 15;
-            const timerEl = document.getElementById("timer");
-            timerEl.style.width = "100%";
-            
-            timerInterval = setInterval(() => {
-                tempoRestante--;
-                timerEl.style.width = (tempoRestante / 15 * 100) + "%";
-                if (tempoRestante <= 0) {
-                    clearInterval(timerInterval);
-                    mostrarToast("⏳ Tempo esgotado! Abstenção (-10 Prestígio)");
-                    prestigio = Math.max(0, prestigio - 10);
-                    historicoVotos.push(`Turno ${turno + 1}: Abstenção por tempo esgotado`);
-                    turno++;
-                    renderizarJogo();
-                }
-            }, 1000);
-        }
-
-        function mostrarToast(texto) {
-            const t = document.getElementById("toast");
-            t.innerText = texto;
-            t.style.display = "block";
-            setTimeout(() => { t.style.display = "none"; }, 2200);
-        }
-
-        function convocarAudiencia() {
-            tocarSom(500, 'sine', 0.2);
-            const c = casos[turno];
-            mostrarToast(c.dica);
-            document.getElementById("skill-audiencia").disabled = true;
-        }
-
-        function nomearJuizAuxiliar() {
-            if (prestigio >= 15) {
-                prestigio -= 15;
-                juizAuxiliarAtivo = true;
-                document.getElementById("skill-juiz").disabled = true;
-                document.getElementById("prestigio").innerText = prestigio;
-                mostrarToast("👨‍⚖️ Juiz Auxiliar nomeado! Redução contínua de processos.");
+        function votar(opcao) {
+            recorde++;
+            processos += 5;
+            if (opcao === 1) {
+                opiniao = Math.min(100, opiniao + 5);
+                prestigio = Math.max(0, prestigio - 5);
             } else {
-                mostrarToast("⚠️ Prestígio insuficiente (requer 15).");
+                opiniao = Math.max(0, opiniao - 5);
+                prestigio = Math.min(100, prestigio + 5);
             }
-        }
-
-        function partilharResultado() {
-            const texto = `🏛️ Caminho ao STF\nFiz um mandato como Ministro ${perfilAtual}!\n🏆 Prestígio: ${prestigio}\n👥 Aprovação: ${opiniao}%\nJogue também!`;
-            if (navigator.share) {
-                navigator.share({ title: 'Caminho ao STF', text: texto });
-            } else {
-                navigator.clipboard.writeText(texto);
-                mostrarToast("📋 Resultado copiado para a área de transferência!");
-            }
-        }
-
-        function renderizarJogo() {
-            document.getElementById("recorde").innerText = recorde;
-            if (turno < casos.length) {
-                iniciarTimer();
-                const c = casos[turno];
-                document.getElementById("prestigio").innerText = prestigio;
-                document.getElementById("pop").innerText = opiniao + "%";
-                document.getElementById("pendentes").innerText = processos;
-                document.getElementById("noticia-box").innerHTML = `📰 <span>${c.noticia}</span>`;
-                document.getElementById("pergunta").innerText = c.texto;
-
-                const dots = document.getElementById("colegiado-dots").children;
-                for (let i = 0; i < 11; i++) {
-                    dots[i].className = "dot " + (i < c.opcoes[0].favoraveis ? "yes" : "no");
-                }
-
-                const divOpcoes = document.getElementById("opcoes");
-                divOpcoes.innerHTML = "";
-                c.opcoes.forEach(op => {
-                    const btn = document.createElement("button");
-                    btn.className = "option-btn";
-                    btn.innerText = op.texto;
-                    btn.onclick = () => tomarDecisao(op);
-                    divOpcoes.appendChild(btn);
-                });
-            } else {
-                clearInterval(timerInterval);
-                tocarSomMartelo();
-                
-                let novoRecorde = false;
-                if (prestigio > recorde) {
-                    recorde = prestigio;
-                    localStorage.setItem("stf_recorde", recorde);
-                    novoRecorde = true;
-                }
-
-                let finalTitulo = "⚖️ Ministro Equilibrado";
-                let finalDesc = "Conduziu o gabinete com serenidade entre a técnica e a sociedade.";
-                if (opiniao >= 70) {
-                    finalTitulo = "🌟 Guardião da Cidadania";
-                    finalDesc = "O seu foco na justiça social marcou uma era de grande aprovação popular!";
-                } else if (prestigio >= 75) {
-                    finalTitulo = "📜 Baluarte da Jurisprudência";
-                    finalDesc = "As suas decisões tornaram-se referência obrigatória nas faculdades de Direito.";
-                }
-
-                let conquistaTags = "";
-                if (processos <= 50) conquistaTags += `<span class="badge-achievement">⚡ Celeridade Máxima</span>`;
-                if (opiniao >= 80) conquistaTags += `<span class="badge-achievement">❤️ Aclamado pelo Povo</span>`;
-                if (prestigio >= 80) conquistaTags += `<span class="badge-achievement">🏛️ Notável Saber Jurídico</span>`;
-
-                let historicoHTML = historicoVotos.map(v => `<div class="history-item">• ${v}</div>`).join('');
-
-                document.getElementById("app").innerHTML = `
-                    <h1>🏛️ Mandato Concluído!</h1>
-                    <div style="text-align:center; margin: 12px 0; background:#0f172a; padding:12px; border-radius:10px;">
-                        <h2 style="color:#38bdf8; margin: 6px 0; font-size:1.05rem;">${finalTitulo}</h2>
-                        <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:8px;">${finalDesc}</p>
-                        ${conquistaTags ? `<div style="margin-bottom:8px;">${conquistaTags}</div>` : ''}
-                        ${novoRecorde ? '<p style="color:#22c55e; font-weight:bold; font-size:0.8rem;">🎉 NOVO RECORDE HISTÓRICO!</p>' : ''}
-                        <hr style="border-color:#334155; margin:8px 0;">
-                        <p style="text-align:left; font-size:0.8rem; line-height:1.5;">
-                            🏆 <b>Prestígio Final:</b> ${prestigio}<br>
-                            ⭐ <b>Melhor Recorde:</b> ${recorde}<br>
-                            👥 <b>Aprovação Popular:</b> ${opiniao}%<br>
-                            📂 <b>Processos Restantes:</b> ${processos}
-                        </p>
-                        <p style="text-align:left; font-size:0.75rem; color:#94a3b8; margin-top:8px; font-weight:bold;">Relatório de Decisões:</p>
-                        <div class="history-list">${historicoHTML}</div>
-                    </div>
-                    <button class="option-btn" style="text-align:center; background:#16a34a;" onclick="partilharResultado()">📲 Partilhar Resultado</button>
-                    <button class="option-btn" style="text-align:center;" onclick="location.reload()">Jogar Novamente</button>
-                `;
-            }
-        }
-
-        function tomarDecisao(op) {
-            clearInterval(timerInterval);
-            tocarSomMartelo();
-            prestigio += op.prest;
-            opiniao = Math.min(100, Math.max(0, opiniao + op.pop));
-            
-            let reducaoProcessos = op.proc;
-            if (juizAuxiliarAtivo) reducaoProcessos -= 10;
-            processos = Math.max(0, processos + reducaoProcessos);
-            
-            historicoVotos.push(op.texto);
-            mostrarToast(op.msg);
-            turno++;
-            setTimeout(renderizarJogo, 400);
-        }
-
-        function usarPedidoDeVista() {
-            if (processos >= 20) {
-                tocarSom(400, 'sawtooth', 0.15);
-                processos -= 20;
-                document.getElementById("skill-vista").disabled = true;
-                document.getElementById("pendentes").innerText = processos;
-                mostrarToast("📂 Pedido de Vista concedido (-20 processos)!");
-            }
-        }
-
-        function usarSumula() {
-            tocarSom(700, 'sine', 0.15);
-            prestigio += 10;
-            document.getElementById("skill-sumula").disabled = true;
-            document.getElementById("prestigio").innerText = prestigio;
-            mostrarToast("📜 Súmula Vinculante editada (+10 Prestígio)!");
-        }
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            atualizarInterface();
         }
     </script>
-  <script src="freemium.js"></script>
 </body>
 </html>
