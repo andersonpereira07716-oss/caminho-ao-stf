@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="100" fill="#1e293b"/>
+  <rect x="16" y="16" width="480" height="480" rx="84" fill="none" stroke="#38bdf8" stroke-width="12"/>
+  <circle cx="256" cy="256" r="180" fill="#0f172a"/>
+  <!-- Haste Central -->
+  <path d="M256 120 L256 380" stroke="#f59e0b" stroke-width="20" stroke-linecap="round"/>
+  <!-- Base -->
+  <path d="M170 380 L342 380" stroke="#f59e0b" stroke-width="22" stroke-linecap="round"/>
+  <!-- Trave Superior -->
+  <path d="M120 180 L392 180" stroke="#f59e0b" stroke-width="20" stroke-linecap="round"/>
+  <!-- Correntes e Prato Esquerdo -->
+  <path d="M120 180 L80 280 M120 180 L160 280" stroke="#fbbf24" stroke-width="8"/>
+  <path d="M60 280 C60 320, 180 320, 180 280 Z" fill="#f59e0b"/>
+  <!-- Correntes e Prato Direito -->
+  <path d="M392 180 L352 280 M392 180 L432 280" stroke="#fbbf24" stroke-width="8"/>
+  <path d="M332 280 C332 320, 452 320, 452 280 Z" fill="#f59e0b"/>
+  <!-- Enfeite do Topo -->
+  <circle cx="256" cy="110" r="22" fill="#fbbf24"/>
+</svg>
