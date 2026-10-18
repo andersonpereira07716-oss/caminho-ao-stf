@@ -27,8 +27,8 @@
 
         .skills-section { margin-bottom: 10px; background: #0f172a; padding: 8px 10px; border-radius: 10px; }
         .skills-title { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
-        .skills-btns { display: flex; gap: 6px; }
-        .btn-skill { background: #0284c7; color: white; border: none; padding: 6px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; flex: 1; transition: 0.2s; }
+        .skills-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .btn-skill { background: #0284c7; color: white; border: none; padding: 6px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
         .btn-skill:disabled { background: #475569; opacity: 0.5; cursor: not-allowed; }
 
         .vote-box { background: #0f172a; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 0.75rem; text-align: center; }
@@ -51,6 +51,7 @@
 
         .history-list { text-align: left; background: #0f172a; padding: 10px; border-radius: 8px; font-size: 0.75rem; max-height: 120px; overflow-y: auto; margin-top: 8px; border: 1px solid #334155; }
         .history-item { margin-bottom: 4px; color: #cbd5e1; border-bottom: 1px solid #1e293b; padding-bottom: 2px; }
+        .badge-achievement { background: #15803d; color: #f0fdf4; padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; display: inline-block; margin: 2px; }
     </style>
 </head>
 <body>
@@ -106,6 +107,7 @@
                     <button class="btn-skill" id="skill-vista" onclick="usarPedidoDeVista()">⏳ Pedir Vista (-20)</button>
                     <button class="btn-skill" id="skill-sumula" onclick="usarSumula()">📜 Súmula (+10)</button>
                     <button class="btn-skill" id="skill-audiencia" onclick="convocarAudiencia()">🗣️ Audiência Pública</button>
+                    <button class="btn-skill" id="skill-juiz" onclick="nomearJuizAuxiliar()">👨‍⚖️ Juiz Auxiliar (-15 Pr.)</button>
                 </div>
             </div>
 
@@ -132,6 +134,7 @@
         let timerInterval = null;
         let recorde = localStorage.getItem("stf_recorde") || 0;
         let historicoVotos = [];
+        let juizAuxiliarAtivo = false;
 
         function tocarSom(frequencia = 440, tipo = 'sine', duracao = 0.1) {
             if (!audioAtivo) return;
@@ -256,6 +259,18 @@
             document.getElementById("skill-audiencia").disabled = true;
         }
 
+        function nomearJuizAuxiliar() {
+            if (prestigio >= 15) {
+                prestigio -= 15;
+                juizAuxiliarAtivo = true;
+                document.getElementById("skill-juiz").disabled = true;
+                document.getElementById("prestigio").innerText = prestigio;
+                mostrarToast("👨‍⚖️ Juiz Auxiliar nomeado! Redução contínua de processos.");
+            } else {
+                mostrarToast("⚠️ Prestígio insuficiente (requer 15).");
+            }
+        }
+
         function partilharResultado() {
             const texto = `🏛️ Caminho ao STF\nFiz um mandato como Ministro ${perfilAtual}!\n🏆 Prestígio: ${prestigio}\n👥 Aprovação: ${opiniao}%\nJogue também!`;
             if (navigator.share) {
@@ -312,6 +327,11 @@
                     finalDesc = "As suas decisões tornaram-se referência obrigatória nas faculdades de Direito.";
                 }
 
+                let conquistaTags = "";
+                if (processos <= 50) conquistaTags += `<span class="badge-achievement">⚡ Celeridade Máxima</span>`;
+                if (opiniao >= 80) conquistaTags += `<span class="badge-achievement">❤️ Aclamado pelo Povo</span>`;
+                if (prestigio >= 80) conquistaTags += `<span class="badge-achievement">🏛️ Notável Saber Jurídico</span>`;
+
                 let historicoHTML = historicoVotos.map(v => `<div class="history-item">• ${v}</div>`).join('');
 
                 document.getElementById("app").innerHTML = `
@@ -319,6 +339,7 @@
                     <div style="text-align:center; margin: 12px 0; background:#0f172a; padding:12px; border-radius:10px;">
                         <h2 style="color:#38bdf8; margin: 6px 0; font-size:1.05rem;">${finalTitulo}</h2>
                         <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:8px;">${finalDesc}</p>
+                        ${conquistaTags ? `<div style="margin-bottom:8px;">${conquistaTags}</div>` : ''}
                         ${novoRecorde ? '<p style="color:#22c55e; font-weight:bold; font-size:0.8rem;">🎉 NOVO RECORDE HISTÓRICO!</p>' : ''}
                         <hr style="border-color:#334155; margin:8px 0;">
                         <p style="text-align:left; font-size:0.8rem; line-height:1.5;">
@@ -341,7 +362,11 @@
             tocarSomMartelo();
             prestigio += op.prest;
             opiniao = Math.min(100, Math.max(0, opiniao + op.pop));
-            processos = Math.max(0, processos + op.proc);
+            
+            let reducaoProcessos = op.proc;
+            if (juizAuxiliarAtivo) reducaoProcessos -= 10;
+            processos = Math.max(0, processos + reducaoProcessos);
+            
             historicoVotos.push(op.texto);
             mostrarToast(op.msg);
             turno++;
