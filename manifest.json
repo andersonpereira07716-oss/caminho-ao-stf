@@ -1,18 +1,1 @@
-{
-  "id": "/",
-  "name": "Caminho ao STF",
-  "short_name": "STF Game",
-  "description": "Caminho ao STF - jogo jurídico",
-  "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "orientation": "portrait",
-  "lang": "pt-BR",
-  "background_color": "#0f172a",
-  "theme_color": "#1a202c",
-  "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ]
-}
+{"id":"/","name":"Caminho ao STF","short_name":"STF Game","start_url":"/","scope":"/","display":"standalone","orientation":"portrait","lang":"pt-BR","background_color":"#0f172a","theme_color":"#1a202c","icons":[{"src":"/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},{"src":"/icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}]}
