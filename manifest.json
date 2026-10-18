@@ -3,13 +3,14 @@
   "short_name": "STF Game",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#1a202c",
+  "background_color": "#0f172a",
   "theme_color": "#1a202c",
   "icons": [
     {
-      "src": "icon.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%231e293b'/%3E%3Ctext x='50%25' y='55%25' font-size='220' text-anchor='middle' dominant-baseline='middle'%3E⚖️%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
