@@ -3,88 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caminho ao STF</title>
+    <title>Caminho ao STF - Edição Suprema</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a202c">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background: #1a202c; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        .game-container { background: #2d3748; width: 100%; max-width: 400px; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; }
-        h1 { font-size: 1.5rem; margin-bottom: 15px; color: #63b3ed; }
-        .stats { display: flex; justify-content: space-around; background: #4a5568; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
-        .question-box { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.4; min-height: 80px; }
-        button { background: #3182ce; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; margin-bottom: 10px; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
-        button:active { background: #2b6cb0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; }
+        .game-container { background: #1e293b; width: 100%; max-width: 480px; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); border: 1px solid #334155; }
+        h1 { font-size: 1.4rem; margin-bottom: 12px; color: #38bdf8; text-align: center; font-weight: 700; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 0.8rem; text-align: center; border: 1px solid #334155; }
+        .stat-val { font-weight: bold; color: #38bdf8; display: block; font-size: 0.95rem; }
+
+        .news-banner { background: #451a03; border-left: 4px solid #f97316; color: #ffedd5; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        .question-box { background: #334155; padding: 14px; border-radius: 10px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; border-left: 4px solid #38bdf8; }
+
+        .skills-section { margin-bottom: 12px; background: #0f172a; padding: 10px; border-radius: 10px; }
+        .skills-title { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; font-weight: bold; }
+        .skills-btns { display: flex; gap: 6px; }
+        .btn-skill { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; flex: 1; transition: 0.2s; }
+        .btn-skill:disabled { background: #475569; opacity: 0.5; cursor: not-allowed; }
+
+        .vote-box { background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 0.8rem; text-align: center; }
+        .vote-dots { display: flex; justify-content: center; gap: 4px; margin-top: 6px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #475569; }
+        .dot.yes { background: #22c55e; }
+        .dot.no { background: #ef4444; }
+
+        button.option-btn { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem; cursor: pointer; text-align: left; transition: background 0.2s; line-height: 1.3; }
+        button.option-btn:hover { background: #1d4ed8; }
+        button.option-btn:active { background: #1e40af; }
     </style>
 </head>
 <body>
 
-    <div class="game-container">
-        <h1>Caminho ao STF</h1>
-        <div class="stats">
-            <div>⚖️ Prestígio: <span id="prestigio">50</span></div>
-            <div>⏳ Turno: <span id="turno">1</span>/5</div>
+    <div class="game-container" id="app">
+        <h1>⚖️ Caminho ao STF</h1>
+
+        <!-- Status e Gestão do Gabinete -->
+        <div class="stats-grid">
+            <div>⚖️ Prestígio<span class="stat-val" id="prestigio">50</span></div>
+            <div>📢 Opinião<span class="stat-val" id="pop">50%</span></div>
+            <div>📂 Processos<span class="stat-val" id="pendentes">120</span></div>
         </div>
-        <div class="question-box" id="pergunta">A carregar o desafio...</div>
+
+        <!-- Mídia e Notícias Dinâmicas -->
+        <div class="news-banner" id="noticia-box">
+            📰 <span><b>Mídia:</b> Plenário prepara pauta de julgamentos decisivos.</span>
+        </div>
+
+        <!-- Pergunta Principal -->
+        <div class="question-box" id="pergunta">A carregar o caso...</div>
+
+        <!-- Árvore de Habilidades -->
+        <div class="skills-section">
+            <div class="skills-title">Habilidades do Gabinete</div>
+            <div class="skills-btns">
+                <button class="btn-skill" id="skill-vista" onclick="usarPedidoDeVista()">⏳ Pedir Vista (-20 Proc.)</button>
+                <button class="btn-skill" id="skill-sumula" onclick="usarSumula()">📜 Súmula (+10 Prest.)</button>
+            </div>
+        </div>
+
+        <!-- Votação Colegiada -->
+        <div class="vote-box">
+            <span>Plenário do STF (11 Ministros)</span>
+            <div class="vote-dots" id="colegiado-dots">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <!-- Opções de Decisão -->
         <div id="opcoes"></div>
     </div>
 
     <script>
-        const questoes = [
+        let turno = 0;
+        let prestigio = 50;
+        let opiniao = 50;
+        let processos = 120;
+        let vistaUsado = false;
+
+        const casos = [
             {
-                texto: "Um recurso de grande repercussão geral chega à tua mesa. O que decides priorizar?",
+                noticia: "Jornais destacam tensão entre os poderes sobre o orçamento de saúde.",
+                texto: "Um recurso extraordinário exige que o Estado forneça medicamentos de alto custo não homologados. Qual a sua tese?",
                 opcoes: [
-                    { texto: "Analisar a jurisprudência estrita.", prestigio: +10 },
-                    { texto: "Considerar o impacto social imediato.", prestigio: +5 }
+                    { texto: "Garantir o direito à saúde integral imediatamente.", prest: +5, pop: +15, proc: -15, favoraveis: 7 },
+                    { texto: "Exigir critérios técnicos e orçamentários estritos.", prest: +12, pop: -10, proc: -5, favoraveis: 6 }
                 ]
             },
             {
-                texto: "Surpreende-te um impasse processual entre instâncias inferiores. Qual a tua postura?",
+                noticia: "Protestos em todo o país cobram maior transparência nas decisões públicas.",
+                texto: "Impugnação de uma lei sobre sigilo fiscal de autoridades chega ao seu gabinete. Como votar?",
                 opcoes: [
-                    { texto: "Emitir súmula vinculante para alinhar entendimentos.", prestigio: +15 },
-                    { texto: "Aguardar novos debates doutrinários.", prestigio: -5 }
+                    { texto: "Derrubar o sigilo com base na transparência ampla.", prest: +10, pop: +20, proc: -10, favoraveis: 8 },
+                    { texto: "Manter o sigilo para proteger a segurança institucional.", prest: -5, pop: -20, proc: -5, favoraveis: 4 }
+                ]
+            },
+            {
+                noticia: "Mercado financeiro e juristas aguardam definição jurisprudencial.",
+                texto: "[Consequência] Com base nas suas decisões anteriores, um recurso vinculante pede a padronização das teses. Como encaminhar?",
+                opcoes: [
+                    { texto: "Fixar tese abrangente e pacificar o tema.", prest: +15, pop: +5, proc: -30, favoraveis: 9 },
+                    { texto: "Limitar a decisão estritamente ao caso concreto.", prest: +0, pop: -5, proc: +10, favoraveis: 5 }
                 ]
             }
         ];
 
-        let atual = 0;
-        let prestigio = 50;
-
-        function atualizarJogo() {
-            if (atual < questoes.length) {
-                document.getElementById("turno").innerText = atual + 1;
+        function renderizarJogo() {
+            if (turno < casos.length) {
+                const c = casos[turno];
                 document.getElementById("prestigio").innerText = prestigio;
-                document.getElementById("pergunta").innerText = questoes[atual].texto;
-                
+                document.getElementById("pop").innerText = opiniao + "%";
+                document.getElementById("pendentes").innerText = processos;
+                document.getElementById("noticia-box").innerHTML = `📰 <span>${c.noticia}</span>`;
+                document.getElementById("pergunta").innerText = c.texto;
+
+                // Atualizar votação simulada dos outros 10 ministros
+                const dots = document.getElementById("colegiado-dots").children;
+                for (let i = 0; i < 11; i++) {
+                    dots[i].className = "dot " + (i < c.opcoes[0].favoraveis ? "yes" : "no");
+                }
+
                 const divOpcoes = document.getElementById("opcoes");
                 divOpcoes.innerHTML = "";
-                
-                questoes[atual].opcoes.forEach((opcao) => {
+                c.opcoes.forEach(op => {
                     const btn = document.createElement("button");
-                    btn.innerText =opcao.texto;
-                    btn.onclick = () => {
-                        prestigio += opcao.prestigio;
-                        atual++;
-                        atualizarJogo();
-                    };
+                    btn.className = "option-btn";
+                    btn.innerText = op.texto;
+                    btn.onclick = () => tomarDecisao(op);
                     divOpcoes.appendChild(btn);
                 });
             } else {
-                document.querySelector(".game-container").innerHTML = `
-                    <h1>Fim da Jornada!</h1>
-                    <p style="margin: 20px 0;">Chegaste ao STF com ${prestigio} pontos de prestígio.</p>
-                    <button onclick="location.reload()">Jogar Novamente</button>
+                document.getElementById("app").innerHTML = `
+                    <h1>🏛️ Mandato Concluído!</h1>
+                    <p style="margin: 15px 0; line-height: 1.5; font-size: 0.95rem;">
+                        Você finalizou a jornada no STF!<br><br>
+                        🏆 <b>Prestígio Final:</b> ${prestigio}<br>
+                        👥 <b>Aprovação Popular:</b> ${opiniao}%<br>
+                        📂 <b>Acervo de Processos:</b> ${processos} restantes
+                    </p>
+                    <button class="option-btn" style="text-align:center" onclick="location.reload()">Reiniciar Simulação</button>
                 `;
             }
         }
 
-        // Registo do Service Worker para PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log("Service Worker registado com sucesso!"));
+        function tomarDecisao(op) {
+            prestigio += op.prest;
+            opiniao = Math.min(100, Math.max(0, opiniao + op.pop));
+            processos = Math.max(0, processos + op.proc);
+            turno++;
+            renderizarJogo();
         }
 
-        atualizarJogo();
+        function usarPedidoDeVista() {
+            if (processos >= 20) {
+                processos -= 20;
+                document.getElementById("skill-vista").disabled = true;
+                document.getElementById("pendentes").innerText = processos;
+                alert("Pedido de Vista concedido! Reduziu 20 processos do acervo ao organizar o gabinete.");
+            }
+        }
+
+        function usarSumula() {
+            prestigio += 10;
+            document.getElementById("skill-sumula").disabled = true;
+            document.getElementById("prestigio").innerText = prestigio;
+            alert("Súmula Vinculante editada! Ganhou +10 de Prestígio Jurídico.");
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        renderizarJogo();
     </script>
 </body>
 </html>
