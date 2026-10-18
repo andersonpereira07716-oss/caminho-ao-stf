@@ -2,13 +2,19 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Caminho ao STF</title>
+    
+    <!-- Meta Tags PWA & iOS -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a202c">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col items-center justify-center p-4">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col items-center justify-center p-4 select-none">
 
     <!-- CONTAINER PRINCIPAL -->
     <div id="game-card" class="bg-slate-800/90 backdrop-blur border border-slate-700 rounded-3xl p-5 max-w-md w-full shadow-2xl relative">
@@ -79,7 +85,7 @@
                 </p>
             </div>
 
-            <!-- AÇÕES E ASSESSORIA DE GABINETE -->
+            <!-- AÇÕES DE GABINETE -->
             <div class="grid grid-cols-2 gap-2 text-xs font-bold">
                 <button onclick="acaoGabinete('vista')" class="py-2.5 px-3 bg-sky-900/30 hover:bg-sky-800/40 text-sky-300 rounded-xl border border-sky-500/30 flex items-center justify-center gap-1.5 transition-all">
                     ⏳ Pedir Vista (-20 Proc.)
@@ -135,7 +141,30 @@
 
     <script src="freemium.js"></script>
     <script>
-        let prestigio = 50, opiniao = 60, processos = 120, recorde = 0, somLigado = true;
+        let prestigio = parseInt(localStorage.getItem('stf_prestigio')) || 50;
+        let opiniao = parseInt(localStorage.getItem('stf_opiniao')) || 60;
+        let processos = parseInt(localStorage.getItem('stf_processos')) || 120;
+        let recorde = parseInt(localStorage.getItem('stf_recorde')) || 0;
+        let somLigado = true;
+
+        // Sintetizador de Som do Martelo (Web Audio API)
+        function tocarSomMartelo() {
+            if (!somLigado) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(150, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch(e) {}
+        }
 
         const bancoCasos = [
             {
@@ -155,12 +184,6 @@
                 caso: "Estado questiona a unificação de impostos regionais via Lei Complementar. Qual o posicionamento?",
                 op1: "Manter a lei complementar para estabilidade nacional.",
                 op2: "Garantir autonomia federativa e anular a norma."
-            },
-            {
-                noticia: "📰 Sindicatos e federações patronais pressionam o Judiciário Trabalhista.",
-                caso: "Validade de acordo coletivo que reduz direitos não previstos explicitamente na CLT. Qual a tese?",
-                op1: "Prevalência do negociado sobre o legislado.",
-                op2: "Nulidade do acordo por violação de garantias mínimas."
             }
         ];
 
@@ -180,13 +203,19 @@
             document.getElementById('btn-som').innerText = somLigado ? "🔊 Som: ON" : "🔇 Som: OFF";
         }
 
+        function salvarProgresso() {
+            localStorage.setItem('stf_prestigio', prestigio);
+            localStorage.setItem('stf_opiniao', opiniao);
+            localStorage.setItem('stf_processos', processos);
+            localStorage.setItem('stf_recorde', recorde);
+        }
+
         function atualizarInterface() {
             document.getElementById('val-prestigio').innerText = prestigio;
             document.getElementById('val-opiniao').innerText = opiniao + '%';
             document.getElementById('val-processos').innerText = processos;
             document.getElementById('val-recorde').innerText = recorde;
 
-            // Verificar crise ou impeachment
             if (prestigio <= 20 || opiniao <= 20) {
                 document.getElementById('noticia-alerta').className = "text-xs bg-rose-950/60 border border-rose-500/60 text-rose-300 p-2.5 rounded-xl flex items-center gap-2 font-bold animate-pulse";
                 document.getElementById('noticia-alerta').innerText = "⚠️ Risco de Impeachment! O Senado abriu comissão de inquérito sobre suas decisões.";
@@ -201,9 +230,12 @@
             document.getElementById('texto-caso').innerText = c.caso;
             document.getElementById('btn-opcao1').innerText = c.op1;
             document.getElementById('btn-opcao2').innerText = c.op2;
+
+            salvarProgresso();
         }
 
         function acaoGabinete(tipo) {
+            tocarSomMartelo();
             if (tipo === 'vista') {
                 processos = Math.max(0, processos - 20);
             } else if (tipo === 'sumula') {
@@ -217,6 +249,7 @@
         }
 
         function votar(opcao) {
+            tocarSomMartelo();
             recorde++;
             processos += 5;
             if (opcao === 1) {
