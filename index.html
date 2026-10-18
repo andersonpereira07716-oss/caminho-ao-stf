@@ -11,14 +11,20 @@
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col items-center justify-center p-4">
 
     <!-- CONTAINER DO JOGO -->
-    <div id="game-card" class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-3xl p-6 max-w-md w-full shadow-2xl relative">
+    <div id="game-card" class="bg-slate-800/90 backdrop-blur border border-slate-700 rounded-3xl p-5 max-w-md w-full shadow-2xl relative">
         
         <!-- CABEÇALHO DO JOGO -->
-        <div class="text-center mb-6">
+        <div class="text-center mb-4">
             <h1 class="text-2xl font-bold tracking-tight text-sky-400 flex items-center justify-center gap-2">
                 ⚖️ Caminho ao STF
             </h1>
             <p id="subtitulo-perfil" class="text-xs text-slate-400 mt-1">Escolha o perfil da sua gestão no Plenário:</p>
+            
+            <!-- BARRA DO PERFIL ATIVO -->
+            <div id="barra-perfil-ativo" class="hidden flex items-center justify-between mt-2 px-2 text-xs">
+                <span id="badge-perfil" class="px-2.5 py-1 bg-sky-500/20 text-sky-300 border border-sky-500/40 rounded-full font-bold">Gabinete 01 • Garantista</span>
+                <button onclick="toggleSom()" id="btn-som" class="text-slate-400 bg-slate-700/60 hover:bg-slate-700 px-2.5 py-1 rounded-lg border border-slate-600 transition-all">🔊 Som: ON</button>
+            </div>
         </div>
 
         <!-- SELEÇÃO DE PERFIL INICIAL -->
@@ -44,8 +50,8 @@
         <!-- TELA DO JOGO (PAINEL DE GESTÃO E VOTAÇÃO) -->
         <div id="tela-jogo" class="hidden space-y-4">
             
-            <!-- STATUS -->
-            <div class="grid grid-cols-4 gap-2 bg-slate-900/60 p-3 rounded-2xl border border-slate-700/50 text-center text-xs">
+            <!-- STATUS DA GESTÃO -->
+            <div class="grid grid-cols-4 gap-2 bg-slate-900/80 p-3 rounded-2xl border border-slate-700/60 text-center text-xs">
                 <div>
                     <div class="text-slate-400">⚖️ Prestígio</div>
                     <div id="val-prestigio" class="font-bold text-sky-400 text-sm">50</div>
@@ -65,37 +71,59 @@
             </div>
 
             <!-- CARD DA CASUÍSTICA/PROCESSO -->
-            <div class="bg-slate-700/40 p-4 rounded-2xl border border-slate-600/50 space-y-3">
-                <div id="noticia-alerta" class="text-xs bg-amber-950/40 border border-amber-600/40 text-amber-300 p-2 rounded-xl flex items-center gap-2">
+            <div class="bg-slate-900/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
+                <div id="noticia-alerta" class="text-xs bg-amber-950/40 border border-amber-600/40 text-amber-300 p-2.5 rounded-xl flex items-center gap-2">
                     📰 Jornais destacam tensão entre os poderes sobre o orçamento de saúde.
                 </div>
-                <p id="texto-caso" class="text-sm font-medium text-slate-200">
+                <p id="texto-caso" class="text-sm font-medium text-slate-200 leading-relaxed">
                     Um recurso extraordinário exige que o Estado forneça medicamentos de alto custo não homologados. Qual a sua tese?
                 </p>
             </div>
 
             <!-- AÇÕES DO GABINETE -->
             <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-                <button onclick="acaoGabinete('vista')" class="py-2.5 bg-slate-700/80 hover:bg-slate-700 text-sky-300 rounded-xl border border-slate-600">⏳ Pedir Vista (-20)</button>
-                <button onclick="acaoGabinete('sumula')" class="py-2.5 bg-slate-700/80 hover:bg-slate-700 text-amber-300 rounded-xl border border-slate-600">📜 Súmula (+10)</button>
+                <button onclick="acaoGabinete('vista')" class="py-2.5 px-3 bg-sky-900/30 hover:bg-sky-800/40 text-sky-300 rounded-xl border border-sky-500/30 flex items-center justify-center gap-1.5 transition-all">
+                    ⏳ Pedir Vista (-20 Proc.)
+                </button>
+                <button onclick="acaoGabinete('sumula')" class="py-2.5 px-3 bg-amber-900/30 hover:bg-amber-800/40 text-amber-300 rounded-xl border border-amber-500/30 flex items-center justify-center gap-1.5 transition-all">
+                    📜 Súmula (+10 Prest.)
+                </button>
+            </div>
+
+            <!-- PLENÁRIO (11 MINISTROS) -->
+            <div class="text-center pt-1">
+                <div class="text-[11px] text-slate-400 mb-1.5 font-medium">Plenário do STF (11 Ministros)</div>
+                <div id="plenario-placar" class="flex justify-center items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm"></span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm"></span>
+                </div>
             </div>
 
             <!-- BOTÕES DE DECISÃO -->
-            <div class="space-y-2 pt-2">
-                <button onclick="votar(1)" id="btn-opcao1" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl text-xs transition-all text-left">
+            <div class="space-y-2.5 pt-1">
+                <button onclick="votar(1)" id="btn-opcao1" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-2xl text-xs transition-all text-left shadow-lg">
                     Garantir o direito à saúde integral imediatamente.
                 </button>
-                <button onclick="votar(2)" id="btn-opcao2" class="w-full py-3 px-4 bg-blue-600/80 hover:bg-blue-600 text-white font-bold rounded-2xl text-xs transition-all text-left">
+                <button onclick="votar(2)" id="btn-opcao2" class="w-full py-3 px-4 bg-blue-600/90 hover:bg-blue-600 text-white font-semibold rounded-2xl text-xs transition-all text-left shadow-lg">
                     Exigir critérios técnicos e orçamentários estritos.
                 </button>
             </div>
 
             <!-- BARRA FREEMIUM / RECOMPENSAS -->
             <div class="mt-4 pt-3 border-t border-slate-700/60 grid grid-cols-2 gap-2">
-                <button onclick="FreemiumSystem.exibirAnuncioRecompensa('prestigio')" class="py-2 px-3 bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all">
+                <button onclick="FreemiumSystem.exibirAnuncioRecompensa('prestigio')" class="py-2.5 px-3 bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/40 text-amber-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-sm">
                     🎬 +20 Prestígio (Ad)
                 </button>
-                <button onclick="FreemiumSystem.comprarVIP()" class="py-2 px-3 bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-400/50 text-indigo-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all">
+                <button onclick="FreemiumSystem.comprarVIP()" class="py-2.5 px-3 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-400/40 text-indigo-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-sm">
                     👑 Virar VIP (R$ 9,90)
                 </button>
             </div>
@@ -105,13 +133,43 @@
 
     <script src="freemium.js"></script>
     <script>
-        let prestigio = 50, opiniao = 60, processos = 120, recorde = 0;
+        let prestigio = 50, opiniao = 60, processos = 120, recorde = 0, somLigado = true;
+
+        const bancoCasos = [
+            {
+                noticia: "📰 Jornais destacam tensão entre os poderes sobre o orçamento de saúde.",
+                caso: "Um recurso extraordinário exige que o Estado forneça medicamentos de alto custo não homologados. Qual a sua tese?",
+                op1: "Garantir o direito à saúde integral imediatamente.",
+                op2: "Exigir critérios técnicos e orçamentários estritos."
+            },
+            {
+                noticia: "📰 Debate acalorado no Congresso sobre liberdade de expressão na internet.",
+                caso: "Uma grande rede social recusa-se a remover um perfil acusado de disseminar desinformação. Como decide?",
+                op1: "Determinar a remoção imediata sob pena de suspensão.",
+                op2: "Manter o perfil no ar priorizando a liberdade de expressão."
+            },
+            {
+                noticia: "📰 Governadores contestam reforma tributária na Suprema Corte.",
+                caso: "Estado questiona a alíquota única de imposto sobre serviços regionais. Qual o seu posicionamento?",
+                op1: "Declarar a lei constitucional e manter a alíquota nacional.",
+                op2: "Garantir a autonomia tributária dos estados."
+            }
+        ];
+
+        let casoAtualIndex = 0;
 
         function iniciarPerfil(nome) {
             document.getElementById('tela-perfil').classList.add('hidden');
             document.getElementById('subtitulo-perfil').classList.add('hidden');
+            document.getElementById('barra-perfil-ativo').classList.remove('hidden');
+            document.getElementById('badge-perfil').innerText = `Gabinete 01 • ${nome}`;
             document.getElementById('tela-jogo').classList.remove('hidden');
             atualizarInterface();
+        }
+
+        function toggleSom() {
+            somLigado = !somLigado;
+            document.getElementById('btn-som').innerText = somLigado ? "🔊 Som: ON" : "🔇 Som: OFF";
         }
 
         function atualizarInterface() {
@@ -119,6 +177,13 @@
             document.getElementById('val-opiniao').innerText = opiniao + '%';
             document.getElementById('val-processos').innerText = processos;
             document.getElementById('val-recorde').innerText = recorde;
+
+            // Carregar caso atual
+            const c = bancoCasos[casoAtualIndex];
+            document.getElementById('noticia-alerta').innerText = c.noticia;
+            document.getElementById('texto-caso').innerText = c.caso;
+            document.getElementById('btn-opcao1').innerText = c.op1;
+            document.getElementById('btn-opcao2').innerText = c.op2;
         }
 
         function acaoGabinete(tipo) {
@@ -140,6 +205,8 @@
                 opiniao = Math.max(0, opiniao - 5);
                 prestigio = Math.min(100, prestigio + 5);
             }
+            // Mudar para o próximo caso
+            casoAtualIndex = (casoAtualIndex + 1) % bancoCasos.length;
             atualizarInterface();
         }
     </script>
