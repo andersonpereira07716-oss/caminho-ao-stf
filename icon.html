@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Ícone - Caminho ao STF</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; text-align: center; }
+        canvas { border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); max-width: 100%; height: auto; margin-bottom: 20px; border: 2px solid #334155; }
+        .btn-download { background: #22c55e; color: white; border: none; padding: 14px 28px; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.2s; box-shadow: 0 4px 14px rgba(34,197,94,0.4); }
+        .btn-download:hover { background: #16a34a; }
+    </style>
+</head>
+<body>
+
+    <h1 style="margin-bottom: 10px; font-size: 1.5rem; color: #38bdf8;">⚖️ Ícone Promocional do App</h1>
+    <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 20px;">Capa/Ícone em HD gerado para o jogo "Caminho ao STF"</p>
+
+    <canvas id="iconCanvas" width="512" height="512"></canvas>
+
+    <a id="downloadBtn" class="btn-download" download="caminho-ao-stf-icon.png">📥 Baixar Imagem PNG (512x512)</a>
+
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Fundo Gradiente
+        const grad = ctx.createLinearGradient(0, 0, 512, 512);
+        grad.addColorStop(0, '#1e293b');
+        grad.addColorStop(1, '#0f172a');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 512, 512);
+
+        // Moldura Neon Dourada/Azul
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 12;
+        ctx.strokeRect(16, 16, 480, 480);
+
+        // Círculo Central Glow
+        ctx.beginPath();
+        ctx.arc(256, 220, 130, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.15)';
+        ctx.fill();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#0284c7';
+        ctx.stroke();
+
+        // Desenhar Emoji/Símbolo Central (Balança)
+        ctx.font = '110px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('⚖️', 256, 210);
+
+        // Texto do Título do Jogo
+        ctx.font = 'bold 36px system-ui, sans-serif';
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText('CAMINHO AO STF', 256, 380);
+
+        // Subtítulo
+        ctx.font = '600 20px system-ui, sans-serif';
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillText('EDIÇÃO SUPREMA', 256, 420);
+
+        // Preparar link de download
+        const downloadBtn = document.getElementById('downloadBtn');
+        downloadBtn.href = canvas.toDataURL('image/png');
+    </script>
+</body>
+</html>
