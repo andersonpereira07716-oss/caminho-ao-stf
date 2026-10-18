@@ -15,8 +15,11 @@
         .profile-bar { text-align: center; font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 6px 10px; border-radius: 8px; }
         .badge { background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 0.8rem; text-align: center; border: 1px solid #334155; }
-        .stat-val { font-weight: bold; color: #38bdf8; display: block; font-size: 0.95rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 0.75rem; text-align: center; border: 1px solid #334155; }
+        .stat-val { font-weight: bold; color: #38bdf8; display: block; font-size: 0.9rem; }
+
+        .timer-bar { width: 100%; height: 6px; background: #334155; border-radius: 3px; margin-bottom: 10px; overflow: hidden; }
+        .timer-progress { height: 100%; background: #ef4444; width: 100%; transition: width 1s linear; }
 
         .news-banner { background: #451a03; border-left: 4px solid #f97316; color: #ffedd5; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 
@@ -30,9 +33,9 @@
 
         .vote-box { background: #0f172a; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 0.75rem; text-align: center; }
         .vote-dots { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
-        .dot { width: 9px; height: 9px; border-radius: 50%; background: #475569; }
-        .dot.yes { background: #22c55e; }
-        .dot.no { background: #ef4444; }
+        .dot { width: 9px; height: 9px; border-radius: 50%; background: #475569; transition: transform 0.2s, background 0.3s; }
+        .dot.yes { background: #22c55e; transform: scale(1.1); }
+        .dot.no { background: #ef4444; transform: scale(1.1); }
 
         button.option-btn { background: #2563eb; color: white; border: none; padding: 10px 12px; width: 100%; border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; cursor: pointer; text-align: left; transition: background 0.2s; line-height: 1.3; }
         button.option-btn:hover { background: #1d4ed8; }
@@ -57,7 +60,10 @@
             <div>⚖️ Prestígio<span class="stat-val" id="prestigio">50</span></div>
             <div>📢 Opinião<span class="stat-val" id="pop">50%</span></div>
             <div>📂 Processos<span class="stat-val" id="pendentes">120</span></div>
+            <div>🏆 Recorde<span class="stat-val" id="recorde">0</span></div>
         </div>
+
+        <div class="timer-bar"><div class="timer-progress" id="timer"></div></div>
 
         <div class="news-banner" id="noticia-box">
             📰 <span><b>Mídia:</b> Plenário prepara pauta de julgamentos decisivos.</span>
@@ -91,8 +97,10 @@
         let opiniao = 50;
         let processos = 120;
         let audioAtivo = false;
+        let tempoRestante = 15;
+        let timerInterval = null;
+        let recorde = localStorage.getItem("stf_recorde") || 0;
 
-        // Web Audio API simples para efeitos sonoros
         function tocarSom(frequencia = 440, tipo = 'sine', duracao = 0.1) {
             if (!audioAtivo) return;
             try {
@@ -120,7 +128,7 @@
             {
                 noticia: "Jornais destacam tensão entre os poderes sobre o orçamento de saúde.",
                 texto: "Um recurso extraordinário exige que o Estado forneça medicamentos de alto custo não homologados. Qual a sua tese?",
-                dica: "💡 Perito indica: A população apoia forte investimento em saúde, mas o impacto fiscal preocupa o governo.",
+                dica: "💡 Perito indica: A população apoia forte investimento em saúde.",
                 opcoes: [
                     { texto: "Garantir o direito à saúde integral imediatamente.", prest: +5, pop: +15, proc: -15, favoraveis: 7, msg: "Apoio popular em alta!" },
                     { texto: "Exigir critérios técnicos e orçamentários estritos.", prest: +12, pop: -10, proc: -5, favoraveis: 6, msg: "Aprovado pelos tribunais inferiores." }
@@ -129,22 +137,50 @@
             {
                 noticia: "Protestos em todo o país cobram maior transparência nas decisões públicas.",
                 texto: "Impugnação de uma lei sobre sigilo fiscal de autoridades chega ao seu gabinete. Como votar?",
-                dica: "💡 Perito indica: Sociedade civil organizada pressiona pelo fim do sigilo.",
+                dica: "💡 Perito indica: Sociedade civil pressiona pelo fim do sigilo.",
                 opcoes: [
                     { texto: "Derrubar o sigilo com base na transparência ampla.", prest: +10, pop: +20, proc: -10, favoraveis: 8, msg: "Transparência fortalecida!" },
                     { texto: "Manter o sigilo para proteger a segurança institucional.", prest: -5, pop: -20, proc: -5, favoraveis: 4, msg: "Repercussão negativa na imprensa." }
                 ]
             },
             {
+                noticia: "Big Techs e órgãos reguladores acompanham debate sobre dados e IA.",
+                texto: "Ação direta questiona a recolha automatizada de dados biométricos sem consentimento prévio. Como decidir?",
+                dica: "💡 Perito indica: Defesa da privacidade gera precedentes globais.",
+                opcoes: [
+                    { texto: "Suspender a recolha até regulamentação estrita.", prest: +15, pop: +10, proc: -15, favoraveis: 8, msg: "Marco da proteção de dados estabelecido!" },
+                    { texto: "Permitir a recolha para incentivar o desenvolvimento tecnológico.", prest: -5, pop: -15, proc: -5, favoraveis: 5, msg: "Criticado por defensores da privacidade." }
+                ]
+            },
+            {
                 noticia: "Mercado financeiro e juristas aguardam definição jurisprudencial.",
                 texto: "[Consequência Final] Recurso vinculante exige pacificação definitiva da matéria constitucional. Como proceder?",
-                dica: "💡 Perito indica: Este é o julgamento mais importante do ano para o Plenário.",
+                dica: "💡 Perito indica: Julgamento decisivo do mandato.",
                 opcoes: [
                     { texto: "Fixar tese abrangente e pacificar o tema geral.", prest: +15, pop: +5, proc: -30, favoraveis: 9, msg: "Precedente histórico estabelecido!" },
                     { texto: "Limitar o veredito estritamente ao caso concreto.", prest: +0, pop: -5, proc: +10, favoraveis: 5, msg: "Decisão conservadora aplicada." }
                 ]
             }
         ];
+
+        function iniciarTimer() {
+            clearInterval(timerInterval);
+            tempoRestante = 15;
+            const timerEl = document.getElementById("timer");
+            timerEl.style.width = "100%";
+            
+            timerInterval = setInterval(() => {
+                tempoRestante--;
+                timerEl.style.width = (tempoRestante / 15 * 100) + "%";
+                if (tempoRestante <= 0) {
+                    clearInterval(timerInterval);
+                    mostrarToast("⏳ Tempo esgotado! Abstenção (-10 Prestígio)");
+                    prestigio = Math.max(0, prestigio - 10);
+                    turno++;
+                    renderizarJogo();
+                }
+            }, 1000);
+        }
 
         function mostrarToast(texto) {
             const t = document.getElementById("toast");
@@ -161,7 +197,9 @@
         }
 
         function renderizarJogo() {
+            document.getElementById("recorde").innerText = recorde;
             if (turno < casos.length) {
+                iniciarTimer();
                 const c = casos[turno];
                 document.getElementById("prestigio").innerText = prestigio;
                 document.getElementById("pop").innerText = opiniao + "%";
@@ -184,15 +222,22 @@
                     divOpcoes.appendChild(btn);
                 });
             } else {
+                clearInterval(timerInterval);
                 tocarSom(800, 'square', 0.4);
+                
+                if (prestigio > recorde) {
+                    recorde = prestigio;
+                    localStorage.setItem("stf_recorde", recorde);
+                }
+
                 let finalTitulo = "⚖️ Ministro Equilibrado";
-                let finalDesc = "Você conduziu o gabinete com serenidade entre a técnica e a sociedade.";
+                let finalDesc = "Conduziu o gabinete com serenidade entre a técnica e a sociedade.";
                 if (opiniao >= 70) {
                     finalTitulo = "🌟 Guardião da Cidadania";
-                    finalDesc = "Seu foco na justiça social marcou uma era de grande aprovação popular!";
+                    finalDesc = "O seu foco na justiça social marcou uma era de grande aprovação popular!";
                 } else if (prestigio >= 75) {
-                    finalTitulo = "📜 Baluarte da Jurisprudencia";
-                    finalDesc = "Suas decisões técnicas tornaram-se referência obrigatória nas faculdades de Direito.";
+                    finalTitulo = "📜 Baluarte da Jurisprudência";
+                    finalDesc = "As suas decisões tornaram-se referência obrigatória nas faculdades de Direito.";
                 }
 
                 document.getElementById("app").innerHTML = `
@@ -203,6 +248,7 @@
                         <hr style="border-color:#334155; margin:8px 0;">
                         <p style="text-align:left; font-size:0.8rem; line-height:1.5;">
                             🏆 <b>Prestígio Final:</b> ${prestigio}<br>
+                            ⭐ <b>Melhor Recorde:</b> ${recorde}<br>
                             👥 <b>Aprovação Popular:</b> ${opiniao}%<br>
                             📂 <b>Processos Restantes:</b> ${processos}
                         </p>
@@ -213,6 +259,7 @@
         }
 
         function tomarDecisao(op) {
+            clearInterval(timerInterval);
             tocarSom(350, 'sine', 0.15);
             prestigio += op.prest;
             opiniao = Math.min(100, Math.max(0, opiniao + op.pop));
