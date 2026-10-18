@@ -10,35 +10,36 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body { background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; }
         .game-container { background: #1e293b; width: 100%; max-width: 480px; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); border: 1px solid #334155; position: relative; }
-        h1 { font-size: 1.4rem; margin-bottom: 8px; color: #38bdf8; text-align: center; font-weight: 700; }
+        h1 { font-size: 1.4rem; margin-bottom: 6px; color: #38bdf8; text-align: center; font-weight: 700; }
         
-        .profile-bar { text-align: center; font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px; }
-        .badge { background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+        .profile-bar { text-align: center; font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 6px 10px; border-radius: 8px; }
+        .badge { background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 0.8rem; text-align: center; border: 1px solid #334155; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 0.8rem; text-align: center; border: 1px solid #334155; }
         .stat-val { font-weight: bold; color: #38bdf8; display: block; font-size: 0.95rem; }
 
-        .news-banner { background: #451a03; border-left: 4px solid #f97316; color: #ffedd5; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .news-banner { background: #451a03; border-left: 4px solid #f97316; color: #ffedd5; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 
-        .question-box { background: #334155; padding: 14px; border-radius: 10px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; border-left: 4px solid #38bdf8; }
+        .question-box { background: #334155; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-size: 0.9rem; line-height: 1.4; border-left: 4px solid #38bdf8; }
 
-        .skills-section { margin-bottom: 12px; background: #0f172a; padding: 10px; border-radius: 10px; }
-        .skills-title { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px; font-weight: bold; }
+        .skills-section { margin-bottom: 10px; background: #0f172a; padding: 8px 10px; border-radius: 10px; }
+        .skills-title { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
         .skills-btns { display: flex; gap: 6px; }
-        .btn-skill { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; flex: 1; transition: 0.2s; }
+        .btn-skill { background: #0284c7; color: white; border: none; padding: 6px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; flex: 1; transition: 0.2s; }
         .btn-skill:disabled { background: #475569; opacity: 0.5; cursor: not-allowed; }
 
-        .vote-box { background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 0.8rem; text-align: center; }
-        .vote-dots { display: flex; justify-content: center; gap: 4px; margin-top: 6px; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: #475569; }
+        .vote-box { background: #0f172a; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 0.75rem; text-align: center; }
+        .vote-dots { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
+        .dot { width: 9px; height: 9px; border-radius: 50%; background: #475569; }
         .dot.yes { background: #22c55e; }
         .dot.no { background: #ef4444; }
 
-        button.option-btn { background: #2563eb; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; margin-bottom: 8px; font-size: 0.9rem; cursor: pointer; text-align: left; transition: background 0.2s; line-height: 1.3; }
+        button.option-btn { background: #2563eb; color: white; border: none; padding: 10px 12px; width: 100%; border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem; cursor: pointer; text-align: left; transition: background 0.2s; line-height: 1.3; }
         button.option-btn:hover { background: #1d4ed8; }
 
-        /* Toast / Feedback Modal */
-        .toast { display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; }
+        .toast { display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; }
+        
+        .audio-toggle { background: none; border: 1px solid #334155; color: #94a3b8; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -48,7 +49,8 @@
 
         <h1>⚖️ Caminho ao STF</h1>
         <div class="profile-bar">
-            <span>Ministro(a) <b style="color:#fff;">Gabinete 01</b></span> • <span class="badge" id="perfil-tag">Garantista</span>
+            <span>Gabinete 01 • <b class="badge" id="perfil-tag">Garantista</b></span>
+            <button class="audio-toggle" id="btn-audio" onclick="toggleAudio()">🔊 Som: OFF</button>
         </div>
 
         <div class="stats-grid">
@@ -64,10 +66,11 @@
         <div class="question-box" id="pergunta">A carregar o caso...</div>
 
         <div class="skills-section">
-            <div class="skills-title">Habilidades do Gabinete</div>
+            <div class="skills-title">Ações do Gabinete</div>
             <div class="skills-btns">
-                <button class="btn-skill" id="skill-vista" onclick="usarPedidoDeVista()">⏳ Pedir Vista (-20 Proc.)</button>
-                <button class="btn-skill" id="skill-sumula" onclick="usarSumula()">📜 Súmula (+10 Prest.)</button>
+                <button class="btn-skill" id="skill-vista" onclick="usarPedidoDeVista()">⏳ Pedir Vista (-20)</button>
+                <button class="btn-skill" id="skill-sumula" onclick="usarSumula()">📜 Súmula (+10)</button>
+                <button class="btn-skill" id="skill-audiencia" onclick="convocarAudiencia()">🗣️ Audiência Pública</button>
             </div>
         </div>
 
@@ -87,31 +90,58 @@
         let prestigio = 50;
         let opiniao = 50;
         let processos = 120;
-        let historicoDecisoes = [];
+        let audioAtivo = false;
+
+        // Web Audio API simples para efeitos sonoros
+        function tocarSom(frequencia = 440, tipo = 'sine', duracao = 0.1) {
+            if (!audioAtivo) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = tipo;
+                osc.frequency.value = frequencia;
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duracao);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duracao);
+            } catch(e) {}
+        }
+
+        function toggleAudio() {
+            audioAtivo = !audioAtivo;
+            document.getElementById("btn-audio").innerText = audioAtivo ? "🔊 Som: ON" : "🔊 Som: OFF";
+            tocarSom(600, 'triangle', 0.15);
+        }
 
         const casos = [
             {
                 noticia: "Jornais destacam tensão entre os poderes sobre o orçamento de saúde.",
                 texto: "Um recurso extraordinário exige que o Estado forneça medicamentos de alto custo não homologados. Qual a sua tese?",
+                dica: "💡 Perito indica: A população apoia forte investimento em saúde, mas o impacto fiscal preocupa o governo.",
                 opcoes: [
-                    { texto: "Garantir o direito à saúde integral imediatamente.", prest: +5, pop: +15, proc: -15, favoraveis: 7, msg: "Decisão aclamada pela população!" },
-                    { texto: "Exigir critérios técnicos e orçamentários estritos.", prest: +12, pop: -10, proc: -5, favoraveis: 6, msg: "Elogiado pela comunidade jurídica!" }
+                    { texto: "Garantir o direito à saúde integral imediatamente.", prest: +5, pop: +15, proc: -15, favoraveis: 7, msg: "Apoio popular em alta!" },
+                    { texto: "Exigir critérios técnicos e orçamentários estritos.", prest: +12, pop: -10, proc: -5, favoraveis: 6, msg: "Aprovado pelos tribunais inferiores." }
                 ]
             },
             {
                 noticia: "Protestos em todo o país cobram maior transparência nas decisões públicas.",
                 texto: "Impugnação de uma lei sobre sigilo fiscal de autoridades chega ao seu gabinete. Como votar?",
+                dica: "💡 Perito indica: Sociedade civil organizada pressiona pelo fim do sigilo.",
                 opcoes: [
-                    { texto: "Derrubar o sigilo com base na transparência ampla.", prest: +10, pop: +20, proc: -10, favoraveis: 8, msg: "Forte impacto na transparência pública!" },
-                    { texto: "Manter o sigilo para proteger a segurança institucional.", prest: -5, pop: -20, proc: -5, favoraveis: 4, msg: "Decisão controversa na imprensa." }
+                    { texto: "Derrubar o sigilo com base na transparência ampla.", prest: +10, pop: +20, proc: -10, favoraveis: 8, msg: "Transparência fortalecida!" },
+                    { texto: "Manter o sigilo para proteger a segurança institucional.", prest: -5, pop: -20, proc: -5, favoraveis: 4, msg: "Repercussão negativa na imprensa." }
                 ]
             },
             {
                 noticia: "Mercado financeiro e juristas aguardam definição jurisprudencial.",
-                texto: "[Consequência] Com base nas suas decisões anteriores, um recurso vinculante pede a padronização das teses. Como encaminhar?",
+                texto: "[Consequência Final] Recurso vinculante exige pacificação definitiva da matéria constitucional. Como proceder?",
+                dica: "💡 Perito indica: Este é o julgamento mais importante do ano para o Plenário.",
                 opcoes: [
-                    { texto: "Fixar tese abrangente e pacificar o tema.", prest: +15, pop: +5, proc: -30, favoraveis: 9, msg: "Jurisprudência unificada com sucesso!" },
-                    { texto: "Limitar a decisão estritamente ao caso concreto.", prest: +0, pop: -5, proc: +10, favoraveis: 5, msg: "Acervo de processos continuará alto." }
+                    { texto: "Fixar tese abrangente e pacificar o tema geral.", prest: +15, pop: +5, proc: -30, favoraveis: 9, msg: "Precedente histórico estabelecido!" },
+                    { texto: "Limitar o veredito estritamente ao caso concreto.", prest: +0, pop: -5, proc: +10, favoraveis: 5, msg: "Decisão conservadora aplicada." }
                 ]
             }
         ];
@@ -120,7 +150,14 @@
             const t = document.getElementById("toast");
             t.innerText = texto;
             t.style.display = "block";
-            setTimeout(() => { t.style.display = "none"; }, 2000);
+            setTimeout(() => { t.style.display = "none"; }, 2200);
+        }
+
+        function convocarAudiencia() {
+            tocarSom(500, 'sine', 0.2);
+            const c = casos[turno];
+            mostrarToast(c.dica);
+            document.getElementById("skill-audiencia").disabled = true;
         }
 
         function renderizarJogo() {
@@ -147,32 +184,39 @@
                     divOpcoes.appendChild(btn);
                 });
             } else {
-                let conquista = "🏛️ Jurista Equilibrado";
-                if (opiniao >= 70) conquista = "🏆 Constitucionalista do Povo";
-                if (prestigio >= 75) conquista = "📜 Mestre da Jurisprudência";
+                tocarSom(800, 'square', 0.4);
+                let finalTitulo = "⚖️ Ministro Equilibrado";
+                let finalDesc = "Você conduziu o gabinete com serenidade entre a técnica e a sociedade.";
+                if (opiniao >= 70) {
+                    finalTitulo = "🌟 Guardião da Cidadania";
+                    finalDesc = "Seu foco na justiça social marcou uma era de grande aprovação popular!";
+                } else if (prestigio >= 75) {
+                    finalTitulo = "📜 Baluarte da Jurisprudencia";
+                    finalDesc = "Suas decisões técnicas tornaram-se referência obrigatória nas faculdades de Direito.";
+                }
 
                 document.getElementById("app").innerHTML = `
                     <h1>🏛️ Mandato Concluído!</h1>
-                    <div style="text-align:center; margin: 15px 0; background:#0f172a; padding:15px; border-radius:10px;">
-                        <p style="font-size:0.85rem; color:#94a3b8;">Sua conquista desbloqueada:</p>
-                        <h2 style="color:#38bdf8; margin: 8px 0; font-size:1.1rem;">${conquista}</h2>
-                        <hr style="border-color:#334155; margin:10px 0;">
-                        <p style="text-align:left; font-size:0.85rem; line-height:1.6;">
-                            ⚖️ <b>Prestígio Final:</b> ${prestigio}<br>
+                    <div style="text-align:center; margin: 12px 0; background:#0f172a; padding:12px; border-radius:10px;">
+                        <h2 style="color:#38bdf8; margin: 6px 0; font-size:1.05rem;">${finalTitulo}</h2>
+                        <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:8px;">${finalDesc}</p>
+                        <hr style="border-color:#334155; margin:8px 0;">
+                        <p style="text-align:left; font-size:0.8rem; line-height:1.5;">
+                            🏆 <b>Prestígio Final:</b> ${prestigio}<br>
                             👥 <b>Aprovação Popular:</b> ${opiniao}%<br>
-                            📂 <b>Acervo de Processos:</b> ${processos} restantes
+                            📂 <b>Processos Restantes:</b> ${processos}
                         </p>
                     </div>
-                    <button class="option-btn" style="text-align:center" onclick="location.reload()">Reiniciar Simulação</button>
+                    <button class="option-btn" style="text-align:center" onclick="location.reload()">Jogar Novamente</button>
                 `;
             }
         }
 
         function tomarDecisao(op) {
+            tocarSom(350, 'sine', 0.15);
             prestigio += op.prest;
             opiniao = Math.min(100, Math.max(0, opiniao + op.pop));
             processos = Math.max(0, processos + op.proc);
-            historicoDecisoes.push(op.texto);
             mostrarToast(op.msg);
             turno++;
             setTimeout(renderizarJogo, 400);
@@ -180,18 +224,20 @@
 
         function usarPedidoDeVista() {
             if (processos >= 20) {
+                tocarSom(400, 'sawtooth', 0.15);
                 processos -= 20;
                 document.getElementById("skill-vista").disabled = true;
                 document.getElementById("pendentes").innerText = processos;
-                mostrarToast("📂 20 processos reorganizados!");
+                mostrarToast("📂 Pedido de Vista concedido (-20 processos)!");
             }
         }
 
         function usarSumula() {
+            tocarSom(700, 'sine', 0.15);
             prestigio += 10;
             document.getElementById("skill-sumula").disabled = true;
             document.getElementById("prestigio").innerText = prestigio;
-            mostrarToast("📜 Súmula Vinculante Editada (+10 Prestígio)!");
+            mostrarToast("📜 Súmula Vinculante editada (+10 Prestígio)!");
         }
 
         if ('serviceWorker' in navigator) {
